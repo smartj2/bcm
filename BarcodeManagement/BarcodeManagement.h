@@ -18,6 +18,9 @@
 class CBarcodeManagementApp : public CWinApp
 {
 public:
+	CString name;
+	CString pwd;
+	_ConnectionPtr m_pCon;
 	CBarcodeManagementApp();
 
 // ÖØÐ´

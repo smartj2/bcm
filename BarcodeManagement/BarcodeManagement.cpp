@@ -68,6 +68,26 @@ BOOL CBarcodeManagementApp::InitInstance()
 	// 更改用于存储设置的注册表项
 	// TODO: 应适当修改该字符串，
 	// 例如修改为公司或组织名
+
+	::CoInitialize(NULL);
+	HRESULT hr;
+	try
+	{
+		hr = m_pCon.CreateInstance("ADODB.Connection");
+		if (SUCCEEDED(hr))
+		{
+			m_pCon->ConnectionTimeout = 3;
+			hr = m_pCon->Open("Provider=Microsoft.Jet.OLEDB.4.0;Data Source=bcm.mdb","Admin","Sigema",adModeUnknown);
+		}
+	}
+	catch(_com_error e)
+	{
+		CString temp;
+		temp.Format(e.ErrorMessage());
+		::MessageBox(NULL, temp, _T("提示信息"), NULL);
+		return false;
+	}
+
 	SetRegistryKey(_T("应用程序向导生成的本地应用程序"));
 
 	CBarcodeManagementDlg dlg;
