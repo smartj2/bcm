@@ -77,7 +77,8 @@ BOOL CBarcodeManagementApp::InitInstance()
 		if (SUCCEEDED(hr))
 		{
 			m_pCon->ConnectionTimeout = 3;
-			hr = m_pCon->Open("Provider=Microsoft.Jet.OLEDB.4.0;Data Source=bcm.mdb","Admin","Sigema",adModeUnknown);
+			hr = m_pCon->Open("Provider=Microsoft.Jet.OLEDB.4.0;Data Source=E:\\workspace\\CPlusPlus\\BarcodeManagement\\data\\bcm.mdb","","",adModeUnknown);
+			//::MessageBox(NULL, _T(""), _T("连接成功"), NULL);
 		}
 	}
 	catch(_com_error e)

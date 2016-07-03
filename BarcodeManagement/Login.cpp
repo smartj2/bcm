@@ -34,6 +34,7 @@ void CLogin::DoDataExchange(CDataExchange* pDX)
 
 
 BEGIN_MESSAGE_MAP(CLogin, CDialogEx)
+	ON_BN_CLICKED(IDCANCEL, &CLogin::OnBnClickedCancel)
 END_MESSAGE_MAP()
 
 
@@ -69,4 +70,11 @@ BOOL CLogin::PreTranslateMessage(MSG* pMsg)
 		}
 	}
 	return CDialogEx::PreTranslateMessage(pMsg);
+}
+
+
+void CLogin::OnBnClickedCancel()
+{
+	// TODO: 在此添加控件通知处理程序代码
+	CDialogEx::OnCancel();
 }
