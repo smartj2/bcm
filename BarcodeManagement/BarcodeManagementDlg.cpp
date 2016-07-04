@@ -193,7 +193,8 @@ void CBarcodeManagementDlg::OnCartonQuery()
 void CBarcodeManagementDlg::OnAboutbox()
 {
 	// TODO: 在此添加命令处理程序代码
-	
+	CAboutDlg dlg;
+	dlg.DoModal();
 }
 
 
