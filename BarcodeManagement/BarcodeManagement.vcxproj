@@ -20,7 +20,7 @@
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v110_xp</PlatformToolset>
-    <CharacterSet>Unicode</CharacterSet>
+    <CharacterSet>MultiByte</CharacterSet>
     <UseOfMfc>Static</UseOfMfc>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
@@ -104,19 +104,27 @@
   <ItemGroup>
     <ClInclude Include="BarcodeManagement.h" />
     <ClInclude Include="BarcodeManagementDlg.h" />
+    <ClInclude Include="BISSetting.h" />
+    <ClInclude Include="CartonQuery.h" />
     <ClInclude Include="Login.h" />
     <ClInclude Include="Resource.h" />
+    <ClInclude Include="SGMLine.h" />
     <ClInclude Include="stdafx.h" />
+    <ClInclude Include="SubConPack.h" />
     <ClInclude Include="targetver.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="BarcodeManagement.cpp" />
     <ClCompile Include="BarcodeManagementDlg.cpp" />
+    <ClCompile Include="BISSetting.cpp" />
+    <ClCompile Include="CartonQuery.cpp" />
     <ClCompile Include="Login.cpp" />
+    <ClCompile Include="SGMLine.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="SubConPack.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="BarcodeManagement.rc" />

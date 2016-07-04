@@ -10,6 +10,7 @@ class CBarcodeManagementDlg : public CDialogEx
 {
 // 构造
 public:
+	CMenu m_pMenu;
 	CBarcodeManagementDlg(CWnd* pParent = NULL);	// 标准构造函数
 
 // 对话框数据
@@ -29,4 +30,10 @@ protected:
 	afx_msg void OnPaint();
 	afx_msg HCURSOR OnQueryDragIcon();
 	DECLARE_MESSAGE_MAP()
+public:
+	afx_msg void OnBISSetting();
+	afx_msg void OnSGMSetting();
+	afx_msg void OnCartonPacking();
+	afx_msg void OnCartonQuery();
+	afx_msg void OnAboutbox();
 };

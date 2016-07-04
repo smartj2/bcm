@@ -77,16 +77,15 @@ BOOL CBarcodeManagementApp::InitInstance()
 		if (SUCCEEDED(hr))
 		{
 			m_pCon->ConnectionTimeout = 3;
-			hr = m_pCon->Open("Provider=Microsoft.Jet.OLEDB.4.0;Data Source=E:\\workspace\\CPlusPlus\\BarcodeManagement\\data\\bcm.mdb","","",adModeUnknown);
+			hr = m_pCon->Open("Provider=Microsoft.Jet.OLEDB.4.0;Data Source=../data/bcm.mdb","","",adModeUnknown);
 			//::MessageBox(NULL, _T(""), _T("连接成功"), NULL);
 		}
 	}
 	catch(_com_error e)
 	{
 		CString temp;
-		temp.Format(e.ErrorMessage());
-		::MessageBox(NULL, temp, _T("提示信息"), NULL);
-		return false;
+		temp.Format("连接数据库错误信息：%s", e.Description());
+		AfxMessageBox(temp);
 	}
 
 	SetRegistryKey(_T("应用程序向导生成的本地应用程序"));

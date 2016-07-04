@@ -6,7 +6,11 @@
 #include "BarcodeManagement.h"
 #include "BarcodeManagementDlg.h"
 #include "afxdialogex.h"
+#include "BISSetting.h"
+#include "CartonQuery.h"
 #include "Login.h"
+#include "SGMLine.h"
+#include "SubConPack.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -62,7 +66,12 @@ void CBarcodeManagementDlg::DoDataExchange(CDataExchange* pDX)
 BEGIN_MESSAGE_MAP(CBarcodeManagementDlg, CDialogEx)
 	ON_WM_SYSCOMMAND()
 	ON_WM_PAINT()
-	ON_WM_QUERYDRAGICON()
+	ON_WM_QUERYDRAGICON()	
+	ON_COMMAND(ID_32771, &CBarcodeManagementDlg::OnBISSetting)
+	ON_COMMAND(ID_32772, &CBarcodeManagementDlg::OnSGMSetting)
+	ON_COMMAND(ID_32773, &CBarcodeManagementDlg::OnCartonPacking)
+	ON_COMMAND(ID_32774, &CBarcodeManagementDlg::OnCartonQuery)
+	ON_COMMAND(IDD_ABOUTBOX, &CBarcodeManagementDlg::OnAboutbox)
 END_MESSAGE_MAP()
 
 
@@ -75,7 +84,7 @@ BOOL CBarcodeManagementDlg::OnInitDialog()
 	// 将“关于...”菜单项添加到系统菜单中。
 
 	// IDM_ABOUTBOX 必须在系统命令范围内。
-	ASSERT((IDM_ABOUTBOX & 0xFFF0) == IDM_ABOUTBOX);
+	/*ASSERT((IDM_ABOUTBOX & 0xFFF0) == IDM_ABOUTBOX);
 	ASSERT(IDM_ABOUTBOX < 0xF000);
 
 	CMenu* pSysMenu = GetSystemMenu(FALSE);
@@ -90,7 +99,7 @@ BOOL CBarcodeManagementDlg::OnInitDialog()
 			pSysMenu->AppendMenu(MF_SEPARATOR);
 			pSysMenu->AppendMenu(MF_STRING, IDM_ABOUTBOX, strAboutMenu);
 		}
-	}
+	}*/
 
 	// 设置此对话框的图标。当应用程序主窗口不是对话框时，框架将自动
 	//  执行此操作
@@ -99,10 +108,18 @@ BOOL CBarcodeManagementDlg::OnInitDialog()
 
 	// TODO: 在此添加额外的初始化代码
 	CLogin dlg;
-	if (dlg.DoModal() != IDOK)
+	if (dlg.DoModal() == IDOK)
+	{
+	//	CDialog::OnCancel();
+		return false;
+	}
+	if (dlg.DoModal() == IDCANCEL)
 	{
 		CDialog::OnCancel();
 	}
+
+	// 创建菜单
+	//pMenu->GetSubMenu(1)->EnableMenuItem(1, MF_BYPOSITION | MF_GRAYED);
 
 	return TRUE;  // 除非将焦点设置到控件，否则返回 TRUE
 }
@@ -156,3 +173,41 @@ HCURSOR CBarcodeManagementDlg::OnQueryDragIcon()
 	return static_cast<HCURSOR>(m_hIcon);
 }
 
+
+void CBarcodeManagementDlg::OnCartonPacking()
+{
+	// TODO: 在此添加命令处理程序代码
+	CSubConPack dlg;
+	dlg.DoModal();
+}
+
+
+void CBarcodeManagementDlg::OnCartonQuery()
+{
+	// TODO: 在此添加命令处理程序代码
+	CCartonQuery dlg;
+	dlg.DoModal();
+}
+
+
+void CBarcodeManagementDlg::OnAboutbox()
+{
+	// TODO: 在此添加命令处理程序代码
+	
+}
+
+
+void CBarcodeManagementDlg::OnBISSetting()
+{
+	// TODO: 在此添加命令处理程序代码
+	CBISSetting dlg;
+	dlg.DoModal();
+}
+
+
+void CBarcodeManagementDlg::OnSGMSetting()
+{
+	// TODO: 在此添加命令处理程序代码
+	CSGMLine dlg;
+	dlg.DoModal();
+}

@@ -36,6 +36,18 @@
     <ClInclude Include="Login.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="BISSetting.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="SGMLine.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="CartonQuery.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="SubConPack.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="BarcodeManagement.cpp">
@@ -48,6 +60,18 @@
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="Login.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="BISSetting.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="SGMLine.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="CartonQuery.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="SubConPack.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>
