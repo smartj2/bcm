@@ -64,13 +64,13 @@ BOOL CLogin::PreTranslateMessage(MSG* pMsg)
 				return FALSE;
 			}
 
-			CString sql = "SELECT * FROM BCM_User WHERE BCM_User_Name='"+m_UserName+"' and BCM_User_Pswd='"+m_PassWord+"'";
+			CString sql = "select * from bUser where UserName='"+m_UserName+"' and UserPass='"+m_PassWord+"'";
 			try
 			{
 				m_pRs.CreateInstance("ADODB.Recordset");
 				m_pRs->Open((_variant_t)sql, theApp.m_pCon.GetInterfacePtr(), adOpenDynamic, adLockOptimistic, adCmdText);
 
-				if (!m_pRs->adEOF)
+				if (!m_pRs->adoEOF)
 				{
 					theApp.name = m_UserName;
 					theApp.pwd  = m_PassWord;
@@ -86,7 +86,7 @@ BOOL CLogin::PreTranslateMessage(MSG* pMsg)
 			} catch(_com_error e)
 			{
 				CString temp;
-				temp.Format("连接数据库错误信息：%s", e.Description());
+				temp.Format("连接数据库错误信息：%s", e.ErrorMessage());
 				AfxMessageBox(temp);
 			}
 		}
