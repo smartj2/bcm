@@ -6,11 +6,13 @@
 #include "BarcodeManagement.h"
 #include "BarcodeManagementDlg.h"
 #include "afxdialogex.h"
-#include "BISSetting.h"
-#include "CartonQuery.h"
 #include "Login.h"
+#include "BISSetting.h"
 #include "SGMLine.h"
+#include "CartonQuery.h"
 #include "SubConPack.h"
+#include "SinglePack.h"
+#include "AlertBox.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -33,6 +35,8 @@ public:
 // 实现
 protected:
 	DECLARE_MESSAGE_MAP()
+public:
+	virtual BOOL OnInitDialog();
 };
 
 CAboutDlg::CAboutDlg() : CDialogEx(CAboutDlg::IDD)
@@ -50,8 +54,6 @@ END_MESSAGE_MAP()
 
 // CBarcodeManagementDlg 对话框
 
-
-
 CBarcodeManagementDlg::CBarcodeManagementDlg(CWnd* pParent /*=NULL*/)
 	: CDialogEx(CBarcodeManagementDlg::IDD, pParent)
 {
@@ -67,11 +69,12 @@ BEGIN_MESSAGE_MAP(CBarcodeManagementDlg, CDialogEx)
 	ON_WM_SYSCOMMAND()
 	ON_WM_PAINT()
 	ON_WM_QUERYDRAGICON()	
-	ON_COMMAND(ID_32771, &CBarcodeManagementDlg::OnBISSetting)
-	ON_COMMAND(ID_32772, &CBarcodeManagementDlg::OnSGMSetting)
-	ON_COMMAND(ID_32773, &CBarcodeManagementDlg::OnCartonPacking)
-	ON_COMMAND(ID_32774, &CBarcodeManagementDlg::OnCartonQuery)
+	ON_COMMAND(ID_BIS_MENU, &CBarcodeManagementDlg::OnBISSetting)
+	ON_COMMAND(ID_SGM_MENU, &CBarcodeManagementDlg::OnSGMSetting)
+	ON_COMMAND(ID_PACK_MENU, &CBarcodeManagementDlg::OnCartonPacking)
+	ON_COMMAND(ID_INFO_MENU, &CBarcodeManagementDlg::OnCartonQuery)
 	ON_COMMAND(IDD_ABOUTBOX, &CBarcodeManagementDlg::OnAboutbox)
+	ON_COMMAND(ID_SINGLE_MENU, &CBarcodeManagementDlg::OnSingleMenu)
 END_MESSAGE_MAP()
 
 
@@ -84,10 +87,10 @@ BOOL CBarcodeManagementDlg::OnInitDialog()
 	// 将“关于...”菜单项添加到系统菜单中。
 
 	// IDM_ABOUTBOX 必须在系统命令范围内。
-	/*ASSERT((IDM_ABOUTBOX & 0xFFF0) == IDM_ABOUTBOX);
+	ASSERT((IDM_ABOUTBOX & 0xFFF0) == IDM_ABOUTBOX);
 	ASSERT(IDM_ABOUTBOX < 0xF000);
 
-	CMenu* pSysMenu = GetSystemMenu(FALSE);
+	/*CMenu* pSysMenu = GetSystemMenu(FALSE);
 	if (pSysMenu != NULL)
 	{
 		BOOL bNameValid;
@@ -110,8 +113,7 @@ BOOL CBarcodeManagementDlg::OnInitDialog()
 	CLogin dlg;
 	if (dlg.DoModal() == IDOK)
 	{
-	//	CDialog::OnCancel();
-		return false;
+		return FALSE;
 	}
 	if (dlg.DoModal() == IDCANCEL)
 	{
@@ -174,33 +176,8 @@ HCURSOR CBarcodeManagementDlg::OnQueryDragIcon()
 }
 
 
-void CBarcodeManagementDlg::OnCartonPacking()
-{
-	// TODO: 在此添加命令处理程序代码
-	CSubConPack dlg;
-	dlg.DoModal();
-}
-
-
-void CBarcodeManagementDlg::OnCartonQuery()
-{
-	// TODO: 在此添加命令处理程序代码
-	CCartonQuery dlg;
-	dlg.DoModal();
-}
-
-
-void CBarcodeManagementDlg::OnAboutbox()
-{
-	// TODO: 在此添加命令处理程序代码
-	CAboutDlg dlg;
-	dlg.DoModal();
-}
-
-
 void CBarcodeManagementDlg::OnBISSetting()
 {
-	// TODO: 在此添加命令处理程序代码
 	CBISSetting dlg;
 	dlg.DoModal();
 }
@@ -208,7 +185,47 @@ void CBarcodeManagementDlg::OnBISSetting()
 
 void CBarcodeManagementDlg::OnSGMSetting()
 {
-	// TODO: 在此添加命令处理程序代码
 	CSGMLine dlg;
 	dlg.DoModal();
 }
+
+
+void CBarcodeManagementDlg::OnSingleMenu()
+{
+	CSinglePack dlg;
+	dlg.DoModal();
+}
+
+
+void CBarcodeManagementDlg::OnCartonPacking()
+{
+	CSubConPack dlg;
+	dlg.DoModal();
+}
+
+
+void CBarcodeManagementDlg::OnCartonQuery()
+{
+	CCartonQuery dlg;
+	dlg.DoModal();
+}
+
+
+void CBarcodeManagementDlg::OnAboutbox()
+{
+	CAboutDlg dlg;
+	dlg.DoModal();
+}
+
+
+BOOL CAboutDlg::OnInitDialog()
+{
+	CDialogEx::OnInitDialog();
+
+	// TODO:  在此添加额外的初始化
+
+	return TRUE;  // return TRUE unless you set the focus to a control
+	// 异常: OCX 属性页应返回 FALSE
+}
+
+

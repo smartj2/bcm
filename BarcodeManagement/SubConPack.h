@@ -2,6 +2,8 @@
 #include "afxwin.h"
 #include "afxcmn.h"
 
+#include <string>
+using namespace std;
 
 // CSubConPack 对话框
 
@@ -36,15 +38,20 @@ public:
 
 	bool CheckCoreCode(const CString& coreCode);
 	bool CheckBatteryCode(const CString& batteryCode);
-	CString m_ATLCode;
+	CString m_ATLCode;		//电芯码
 	CComboBox m_ATLLen;
 	CComboBox m_ATLWeek;
 	CListCtrl m_BCMList;
 	CComboBox m_Material;
 	CComboBox m_Model;
-	CString m_MYCode;
+	CString m_MYCode;		//电池码
 	CComboBox m_MYLen;
 	CComboBox m_MYWeek;
 	CComboBox m_SGMQA;
 	CComboBox m_SGMLine;
+	string CString2String(const CString cStr);
+	CString String2CString(const string str);
+	int CString2Int(const CString cStr);
+	CString Int2CString(const int num);
+	CProgressCtrl m_PackProgress;
 };

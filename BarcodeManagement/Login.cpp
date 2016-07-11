@@ -8,6 +8,7 @@
 
 
 // CLogin 对话框
+extern CBarcodeManagementApp theApp;
 
 IMPLEMENT_DYNAMIC(CLogin, CDialogEx)
 
@@ -43,11 +44,12 @@ END_MESSAGE_MAP()
 
 BOOL CLogin::PreTranslateMessage(MSG* pMsg)
 {
-	// TODO: 在此添加专用代码和/或调用基类
+	// 取消键盘输入回车事件
 	if (pMsg->message == WM_KEYDOWN && pMsg->wParam == 13)
 	{
 		pMsg->wParam = 9;
 	}
+
 	if (pMsg->message == WM_LBUTTONDOWN)
 	{
 		CRect rect, rc;
@@ -55,9 +57,10 @@ BOOL CLogin::PreTranslateMessage(MSG* pMsg)
 		m_Cancel.GetWindowRect(&rc);
 		CPoint point;
 		GetCursorPos(&point);
+
 		if(rect.PtInRect(point))
 		{
-			UpdateData(TRUE);
+			UpdateData(true);
 			if (m_UserName.IsEmpty() || m_PassWord.IsEmpty())
 			{
 				AfxMessageBox("用户名和密码不能为空!");
@@ -81,26 +84,27 @@ BOOL CLogin::PreTranslateMessage(MSG* pMsg)
 					AfxMessageBox("用户名和密码不正确!");
 					// m_UserName = "";
 					m_PassWord = "";
-					UpdateData(FALSE);
+					UpdateData(false);
 				}
 			} catch(_com_error e)
 			{
-				CString temp;
-				temp.Format("连接数据库错误信息：%s", e.ErrorMessage());
-				AfxMessageBox(temp);
+				CString eMessage;
+				eMessage.Format("连接数据库错误信息：%s", e.ErrorMessage());
+				AfxMessageBox(eMessage);
 			}
 		}
+
 		if (rc.PtInRect(point))
 		{
 			CDialog::OnCancel();
 		}
 	}
+
 	return CDialogEx::PreTranslateMessage(pMsg);
 }
 
 
 void CLogin::OnBnClickedCancel()
 {
-	// TODO: 在此添加控件通知处理程序代码
 	CDialogEx::OnCancel();
 }

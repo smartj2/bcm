@@ -19,9 +19,7 @@
 #include <afxwin.h>         // MFC 核心组件和标准组件
 #include <afxext.h>         // MFC 扩展
 
-
 #include <afxdisp.h>        // MFC 自动化类
-
 
 
 #ifndef _AFX_NO_OLE_SUPPORT
@@ -34,13 +32,6 @@
 #include <afxcontrolbars.h>     // 功能区和控件条的 MFC 支持
 
 #import "msado15.dll" no_namespace rename("EOF","adoEOF")  // 引入数据库连接库
-
-
-
-
-
-
-
 
 
 #ifdef _UNICODE

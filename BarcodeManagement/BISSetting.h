@@ -22,14 +22,15 @@ protected:
 	DECLARE_MESSAGE_MAP()
 public:
 	virtual BOOL OnInitDialog();
+	CListCtrl m_BISList;
 	CString m_ATLLen;
 	CString m_Material;
 	CString m_MI;
 	CString m_Model;
 	CString m_Qty;
 	CString m_Supplier;
-	CListCtrl m_BISList;
 	afx_msg void OnBnClickedAddButton();
 	afx_msg void OnBnClickedModButton();
 	afx_msg void OnBnClickedExitButton();
+	afx_msg void OnNMDblclkBisList(NMHDR *pNMHDR, LRESULT *pResult);
 };

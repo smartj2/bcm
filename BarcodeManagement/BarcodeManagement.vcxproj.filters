@@ -48,6 +48,12 @@
     <ClInclude Include="SubConPack.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="AlertBox.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="SinglePack.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="BarcodeManagement.cpp">
@@ -72,6 +78,12 @@
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="SubConPack.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="AlertBox.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="SinglePack.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>

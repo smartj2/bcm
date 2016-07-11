@@ -4,14 +4,16 @@
 #include "stdafx.h"
 #include "BarcodeManagement.h"
 #include "SubConPack.h"
+#include "AlertBox.h"
 #include "afxdialogex.h"
 
-#include <string>
 #include <boost/regex.hpp>
+#include <boost/format.hpp>
 
 // CSubConPack 对话框
 extern CBarcodeManagementApp theApp;
-static int count = 0;
+static int bnum = 1;
+static int tray  = 1;
 
 IMPLEMENT_DYNAMIC(CSubConPack, CDialogEx)
 
@@ -45,6 +47,7 @@ void CSubConPack::DoDataExchange(CDataExchange* pDX)
 	DDX_Control(pDX, IDC_MYWEEK_COMBO, m_MYWeek);
 	DDX_Control(pDX, IDC_SGMQA_COMB, m_SGMQA);
 	DDX_Control(pDX, IDC_SGMLINE_COMBO, m_SGMLine);
+	DDX_Control(pDX, IDC_PACK_PROGRESS, m_PackProgress);
 }
 
 
@@ -71,21 +74,95 @@ BOOL CSubConPack::OnInitDialog()
 	CDialogEx::OnInitDialog();
 
 	// TODO:  在此添加额外的初始化
+	// 初始化ComBo
+	//	m_Model.AddString("GB-S10-332029-010H");
+	//	m_Model.SetCurSel(0);
+
+	CString sql = "select * from bBISInfo";
+	m_pRs = theApp.m_pCon->Execute((_bstr_t)sql,NULL,adCmdText);
+	if(m_pRs->GetRecordCount()==0)
+	{
+		return TRUE;
+	}
+	if(m_pRs->GetRecordCount()==1)
+	{
+		m_Model.AddString((char*)(_bstr_t)m_pRs->GetCollect("ProductModel"));
+		m_MI.AddString((char*)(_bstr_t)m_pRs->GetCollect("ProductMI"));
+		m_Material.AddString((char*)(_bstr_t)m_pRs->GetCollect("Material"));
+		m_Qty.AddString((char*)(_bstr_t)m_pRs->GetCollect("Quantity"));
+		m_ATLLen.AddString((char*)(_bstr_t)m_pRs->GetCollect("BarcodeLen"));
+		return TRUE;
+	}
+	while(!m_pRs->adoEOF)
+	{
+		m_Model.AddString((char*)(_bstr_t)m_pRs->GetCollect("ProductModel"));
+		m_MI.AddString((char*)(_bstr_t)m_pRs->GetCollect("ProductMI"));
+		m_Material.AddString((char*)(_bstr_t)m_pRs->GetCollect("Material"));
+		m_Qty.AddString((char*)(_bstr_t)m_pRs->GetCollect("Quantity"));
+		m_ATLLen.AddString((char*)(_bstr_t)m_pRs->GetCollect("BarcodeLen"));
+		m_pRs->MoveNext();
+	}
+
+	int week = 1;
+	while (week <= 52)
+	{
+		std::string strWeek = boost::str(boost::format("%02d") % week);
+		m_ATLWeek.AddString(String2CString(strWeek)); // 电芯周期
+		m_MYWeek.AddString(String2CString(strWeek));  // 电池周期
+		week = week + 1;
+	}
+
+	/*int WEEK_MAX = 7;
+	for(int i=0; i < WEEK_MAX; ++i)
+	{
+		m_Day.AddString(Int2CString(i));
+	}*/
+
+	m_MYLen.AddString("12");
+	m_MYLen.AddString("13");
+
+	for (int i = 0; i < 10; i++)
+	{
+		std::string strLine = boost::str(boost::format("%s") % ('A'+i));
+		m_SGMLine.AddString(String2CString(strLine)); // 电芯周期
+	}
+	/*m_SGMLine.AddString("A");
+	m_SGMLine.AddString("B");
+	m_SGMLine.AddString("C");
+	m_SGMLine.AddString("D");*/
+
+	m_SGMQA.AddString("BM-SIGEMA");
+	m_SGMQA.AddString("Li");
+
+	// 初始化默认选项
+	m_Model.SetCurSel(0);
+	m_MI.SetCurSel(1);
+	m_Material.SetCurSel(1);
+	m_Qty.SetCurSel(0);
+	m_ATLLen.SetCurSel(0);
+	m_MYLen.SetCurSel(1);
+	m_SGMLine.SetCurSel(0);
+	m_SGMQA.SetCurSel(1);
+	m_ATLWeek.SetCurSel(20);
+	m_MYWeek.SetCurSel(26);
+
 	m_BCMList.SetExtendedStyle(LVS_EX_FLATSB
 		|LVS_EX_FULLROWSELECT
 		|LVS_EX_HEADERDRAGDROP
 		|LVS_EX_ONECLICKACTIVATE
 		|LVS_EX_GRIDLINES);
-	
-	// 设置表头
-	m_BCMList.InsertColumn(0, "外箱条码", LVCFMT_LEFT, 120, 0);
-	m_BCMList.InsertColumn(0, "产品代码", LVCFMT_LEFT, 150, 1);
-	m_BCMList.InsertColumn(0, "电池条码", LVCFMT_LEFT, 150, 2);
-	m_BCMList.InsertColumn(0, "电芯条码", LVCFMT_LEFT, 150, 3);
-	m_BCMList.InsertColumn(0, "品质检员", LVCFMT_LEFT, 100, 4);
-	m_BCMList.InsertColumn(0, "扫码时间", LVCFMT_LEFT, 150, 5);
 
-//	AddToGird();
+	// 设置表头
+	m_BCMList.InsertColumn(0, "序号", LVCFMT_CENTER, 50, 0);
+	m_BCMList.InsertColumn(1, "托盘号", LVCFMT_CENTER, 50, 1);
+	m_BCMList.InsertColumn(2, "外箱条码", LVCFMT_CENTER, 100, 2);
+	m_BCMList.InsertColumn(3, "电芯代码", LVCFMT_CENTER, 120, 3);
+	m_BCMList.InsertColumn(4, "电池条码", LVCFMT_CENTER, 120, 4);
+	m_BCMList.InsertColumn(5, "组装条码", LVCFMT_CENTER, 120, 5);
+	m_BCMList.InsertColumn(6, "品质检员", LVCFMT_CENTER, 100, 6);
+	m_BCMList.InsertColumn(7, "扫码时间", LVCFMT_CENTER, 120, 7);
+
+	//	AddToList();
 
 	return TRUE;  // return TRUE unless you set the focus to a control
 	// 异常: OCX 属性页应返回 FALSE
@@ -102,6 +179,10 @@ BOOL CSubConPack::PreTranslateMessage(MSG* pMsg)
 			return TRUE;
 		}
 	}
+	//if (pMsg->message == WM_KEYDOWN && pMsg->wParam == 13)
+	//{
+	//	pMsg->wParam = 9;
+	//}
 	return CDialogEx::PreTranslateMessage(pMsg);
 }
 
@@ -116,15 +197,51 @@ void CSubConPack::OnEnChangeAtlcodeEdit()
 	// TODO:  在此添加控件通知处理程序代码
 	UpdateData(TRUE);
 
-	CTime Time;
-	Time = CTime::GetCurrentTime();
-	CString scanTime = Time.Format("%Y-%m-%d %H:%M:%S");
-//&& CheckCoreCode(m_ATLCode)
-	if (m_ATLCode.GetLength() == 12)
+	if (m_MarkBox == "")
 	{
-		m_BCMList.InsertItem(count,"");
-		m_BCMList.SetItemText(count,3,m_ATLCode);
-		m_BCMList.SetItemText(count,5,scanTime);
+		/*CAlertBox dlg;
+		dlg.DoModal();
+		SetDlgItemText(IDC_INFO_STATIC,  "外箱条码不能为空！");*/
+		//UpdateData(FALSE);
+		AfxMessageBox("外箱条码不能为空!");
+		m_ATLCode = "";
+		m_MYCode =  "";
+		UpdateData(FALSE);
+		GetDlgItem(IDC_PACK_EDIT)->SetFocus();
+		return;
+	}
+//	CTime Time;
+//	Time = CTime::GetCurrentTime();
+//	CString scanTime = Time.Format("%Y-%m-%d %H:%M:%S");
+
+	CString model;
+	m_Model.GetLBText(m_Model.GetCurSel(), model);
+//	AfxMessageBox(model);
+	CString atlLen;
+	m_ATLLen.GetLBText(m_ATLLen.GetCurSel(), atlLen);
+
+	if (m_ATLCode.GetLength() == CString2Int(atlLen))
+	{
+		if (!CheckCoreCode(m_ATLCode))
+		{
+			/*CAlertBox dlg;
+			dlg.DoModal();
+			SetDlgItemText(IDC_INFO_STATIC,  "电芯码非法！！！");*/
+
+			AfxMessageBox("");
+			AfxMessageBox("电芯码非法！！！");
+			m_ATLCode = "";
+			m_MYCode =  "";
+			UpdateData(FALSE);
+			GetDlgItem(IDC_ATLCODE_EDIT)->SetFocus();
+			return;
+		}
+		m_BCMList.InsertItem(bnum-1,"");
+		m_BCMList.SetItemText(bnum-1,0,Int2CString(bnum));
+		m_BCMList.SetItemText(bnum-1,1,Int2CString(tray));
+		m_BCMList.SetItemText(bnum-1,2,m_MarkBox);
+		m_BCMList.SetItemText(bnum-1,3,model);
+		m_BCMList.SetItemText(bnum-1,4,m_ATLCode);
 		
 		m_MYCode =  "";
 		UpdateData(FALSE);
@@ -144,21 +261,133 @@ void CSubConPack::OnEnChangeMycodeEdit()
 	// TODO:  在此添加控件通知处理程序代码
 	UpdateData(TRUE);
 
-//	CTime Time;
-//	Time = CTime::GetCurrentTime();
-//	CString scanTime = Time.Format("%Y-%m-%d %H:%M:%S");
-// && CheckBatteryCode(m_MYCode)
-	if (m_MYCode.GetLength() == 13)
+	if (m_ATLCode == "")
 	{
-		//m_BCMList.InsertItem(count,"");
-		m_BCMList.SetItemText(count,2,m_MYCode);
+		/*CAlertBox dlg;
+		dlg.DoModal();
+		SetDlgItemText(IDC_INFO_STATIC,  "请先扫电芯！");*/
 
-		count++;
+		AfxMessageBox("");
+		AfxMessageBox("请先扫电芯！");
+		m_MYCode = "";
+		UpdateData(FALSE);
+
+		GetDlgItem(IDC_ATLCODE_EDIT)->SetFocus();
+		return;
+	}
+
+	CTime Time;
+	Time = CTime::GetCurrentTime();
+	CString scanTime = Time.Format("%Y-%m-%d %H:%M:%S");
+
+	CString myLen;
+	m_MYLen.GetLBText(m_MYLen.GetCurSel(), myLen);
+
+	if (m_MYCode.GetLength() == CString2Int(myLen))
+	{
+		if (!CheckBatteryCode(m_MYCode))
+		{
+			/*CAlertBox dlg;
+			dlg.DoModal();
+			SetDlgItemText(IDC_INFO_STATIC,  "电池码非法！！！");*/
+
+			AfxMessageBox("");
+			AfxMessageBox("电池码非法！！！");
+			m_ATLCode = "";
+			m_MYCode = "";
+
+			m_BCMList.SetItemText(bnum-1,0,"");
+			m_BCMList.SetItemText(bnum-1,1,"");
+			m_BCMList.SetItemText(bnum-1,2,"");
+			m_BCMList.SetItemText(bnum-1,3,"");
+			m_BCMList.SetItemText(bnum-1,4,"");
+			m_BCMList.SetItemText(bnum-1,5,"");
+			m_BCMList.SetItemText(bnum-1,6,"");
+			m_BCMList.SetItemText(bnum-1,7,"");
+
+			UpdateData(FALSE);
+
+			GetDlgItem(IDC_ATLCODE_EDIT)->SetFocus();
+			return;
+		}
+		m_BCMList.SetItemText(bnum-1,5,m_MYCode);
+		m_BCMList.SetItemText(bnum-1,6,theApp.name);
+		m_BCMList.SetItemText(bnum-1,7,scanTime);
 		
+		//AfxMessageBox(m_ATLCode+","+m_MYCode);
+		//将条码存入数据库
+		CString sql = "insert into bBarcode(MarkBox,ATLBarcode,MYBarcode,ScanTime)\
+			values('"+m_MarkBox+"','"+m_ATLCode+"','"+m_MYCode+"','"+scanTime+"')";
+
+		try
+		{
+			theApp.m_pCon->Execute((_bstr_t)sql,NULL,adCmdText);
+			bnum++;
+		} catch(_com_error e)
+		{
+			//e.ErrorMessage();
+			//AfxMessageBox(e.Description());
+			AfxMessageBox("");
+			AfxMessageBox("该电池重码！！！");
+			m_ATLCode = "";
+			m_MYCode = "";
+
+			m_BCMList.SetItemText(bnum-1,0,"");
+			m_BCMList.SetItemText(bnum-1,1,"");
+			m_BCMList.SetItemText(bnum-1,2,"");
+			m_BCMList.SetItemText(bnum-1,3,"");
+			m_BCMList.SetItemText(bnum-1,4,"");
+			m_BCMList.SetItemText(bnum-1,5,"");
+			m_BCMList.SetItemText(bnum-1,6,"");
+			m_BCMList.SetItemText(bnum-1,7,"");
+
+			UpdateData(FALSE);
+			GetDlgItem(IDC_ATLCODE_EDIT)->SetFocus();
+
+			return;
+		}
+
+		//设置进度度
+		m_PackProgress.SetRange(1, 540);
+		m_PackProgress.SetStep(1);
+		m_PackProgress.StepIt();
+
 		m_ATLCode =  "";
 		UpdateData(FALSE);
 
 		GetDlgItem(IDC_ATLCODE_EDIT)->SetFocus();
+
+		if (bnum%20 == 0)
+		{
+			tray = tray + 1;
+		}
+
+		CString packNum;
+		//m_Qty.GetLBText(m_Qty.GetCurSel(), packNum);
+		m_Qty.GetWindowText(packNum);
+		if (bnum-1 == CString2Int(packNum))
+		{
+			AfxMessageBox("");
+			AfxMessageBox("扫描完毕！请打包！");
+			//将装箱信息存入数据库
+			CString model;
+			m_Model.GetLBText(m_Model.GetCurSel(), model);
+
+			CString line;
+			m_SGMLine.GetLBText(m_SGMLine.GetCurSel(), line);
+
+			CString qa;
+			m_SGMQA.GetLBText(m_SGMQA.GetCurSel(), qa);
+
+			CString sql = "insert into bSubCon(ProductModel,MarkBox,MYLine,MYQA) \
+				values('"+model+"','"+m_MarkBox+"','"+line+"','"+qa+"')";
+
+			theApp.m_pCon->Execute((_bstr_t)sql,NULL,adCmdText);
+
+			m_MYCode =  "";
+			UpdateData(FALSE);
+			return;
+		}
 	}
 }
 
@@ -168,15 +397,27 @@ void CSubConPack::OnBnClickedPackButton()
 	// TODO: 在此添加控件通知处理程序代码
 	UpdateData(true);
 
-	if (count < 540)
+	CString packNum;
+	//m_Qty.GetLBText(m_Qty.GetCurSel(), packNum);
+	m_Qty.GetWindowText(packNum);
+
+	if (bnum < CString2Int(packNum))
 	{
 		AfxMessageBox("还不够一箱，请继续扫描！");
+		AfxMessageBox(packNum);
 		return;
 	}
-	else if (count == 540)
+	else if (bnum-1 == CString2Int(packNum))
 	{
 		AfxMessageBox("打包成功！");
-		count = 0;  // 计数回到0
+		bnum = 1;   // 计数回到1
+		tray = 1;
+		m_MarkBox = "";
+		/*m_ATLCode = "";
+		m_MYCode = "";*/
+		m_BCMList.DeleteAllItems();
+		UpdateData(false);
+		GetDlgItem(IDC_PACK_EDIT)->SetFocus();
 		return;
 	}
 }
@@ -192,44 +433,110 @@ void CSubConPack::OnBnClickedExitButton()
 bool CSubConPack::CheckCoreCode(const CString& coreCode)
 {
 	using std::string;
-	string strCoreCode =coreCode.GetString();
+	string strCoreCode = CString2String(coreCode);
 
 	CString type;
-	CString date;
-	CString week;
+	m_MI.GetLBText(m_MI.GetCurSel(), type);  //L41表示代号
 
-	string strType = type.GetString();
-	string strDate = date.GetString();
-	string strWeek = date.GetString();
+	CString year = "6"; //6表示2016年
+	CString week;	   //04表示第4个星期
+	m_ATLWeek.GetLBText(m_ATLWeek.GetCurSel(), week);
+
+	//CString dayInWeek;
+	//m_Day.GetLBText(m_Day.GetCurSel(), dayInWeek); //4表示星期四
+
+	string strType = CString2String(type);
+	string strYear = CString2String(year);
+	string strWeek = CString2String(week);
+	strWeek = boost::str(boost::format("%02d") % strWeek);
+	//string strDayInWeek = CString2String(dayInWeek);
+
 	//1.前三个字符串是一样的，后5位流水号
-	boost::regex reg(strType+strDate+strWeek+"[0-9A-Z]{5}");
+	boost::regex reg(strType + strYear + strWeek + "[0-9A-Z]{6}");
 	return boost::regex_match(strCoreCode, reg);
 }
 
 bool CSubConPack::CheckBatteryCode(const CString& batteryCode)
 {
 	using std::string;
-	string strBatteryCode = batteryCode.GetString();
+	string strBatteryCode = CString2String(batteryCode);
 
-	CString type;		    //N
-	CString produceDate;	//K04
-	CString company;	    //K
-	CString packageDate;	//K09
+	CString type = "N";		   //N表示ATL
+	string strType = CString2String(type);
+
+	CString produceYear = "K"; //K表示2016年
+	string strProduceYear=CString2String(produceYear);
+	CString produceWeek;	   //04表示第4个星期
+	m_ATLWeek.GetLBText(m_ATLWeek.GetCurSel(), produceWeek);
+	string strProduceWeek = CString2String(produceWeek);
+	strProduceWeek = boost::str( boost::format("%s%02d") % strProduceYear % strProduceWeek);
+
+	CString company = "K";     //K表示Sigema
+	string strCompany = CString2String(company);
+
+	CString packageYear = "K"; //K表示2016年
+	string strPackageYear=CString2String(packageYear);
+	CString packageWeek;	   //09表示第9个星期
+	m_MYWeek.GetLBText(m_MYWeek.GetCurSel(), packageWeek);
+	string strPackageWeek = CString2String(packageWeek);
+	strPackageWeek = boost::str( boost::format("%s%02d")% strPackageYear % strPackageWeek);
+
+	CString locale = "B";      //B表示中国
+	string strLocale = CString2String(locale);
 	
-	string strType = company.GetString();
-	string strProduceDate = produceDate.GetString();
-	string strCompany = company.GetString();
-	string strPackageDate = packageDate.GetString();
-
-	//1.前三个字符串是一样的，后5位流水号
-	boost::regex reg(strType+strProduceDate+strCompany+strPackageDate+"B[0-9A-Z]{4}");
+	//1. 固定N
+	//2. K04 生产周数
+	//3. K
+	//4. K09 组装周数
+	//5. B+4位流水号
+	boost::regex reg(strType + strProduceWeek + strCompany + strPackageWeek + strLocale + "[0-9A-Z]{4}");
 	if( boost::regex_match(strBatteryCode, reg)==false)
 	{
 		return false;
 	}
 
-	string strDate1 = strProduceDate.substr(1,2);
-	string strDate2 = strPackageDate.substr(1,2);
-	//todo 判断日期大小
+	//判断日期大小
+	CString atlWeek; // atlWeek: 生产周期
+	CString myWeek;  //  myWeek: 组装周期
+	m_ATLWeek.GetLBText(m_ATLWeek.GetCurSel(), atlWeek);
+	m_MYWeek.GetLBText(m_MYWeek.GetCurSel(), myWeek);
+	if (CString2Int(atlWeek) > CString2Int(myWeek))
+	{
+		return false;
+	}
+
 	return true;
+}
+
+
+string CSubConPack::CString2String(const CString cStr)
+{
+	using std::string;
+	string str = LPCSTR(cStr);
+
+	return str;
+}
+
+
+CString CSubConPack::String2CString(const string str)
+{
+	CString cStr;
+	cStr.Format("%s", str.c_str());
+
+	return cStr;
+}
+
+
+int CSubConPack::CString2Int(const CString cStr)
+{
+	return atoi(cStr);
+}
+
+
+CString CSubConPack::Int2CString(const int num)
+{
+	CString temp;
+	temp.Format(_T("%d"),num);
+
+	return (LPCTSTR)temp;
 }

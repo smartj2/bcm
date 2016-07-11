@@ -1,5 +1,6 @@
 #pragma once
 #include "afxcmn.h"
+#include "afxwin.h"
 
 
 // CCartonQuery ¶Ô»°¿ò
@@ -23,5 +24,8 @@ protected:
 public:
 	CString m_Query;
 	CListCtrl m_ResultList;
+	CComboBox m_QueryType;
 	afx_msg void OnBnClickedQueryButton();
+	afx_msg void OnBnClickedExportButton();
+	virtual BOOL OnInitDialog();
 };

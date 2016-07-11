@@ -8,6 +8,7 @@
 
 
 // CSGMLine 对话框
+extern CBarcodeManagementApp theApp;
 
 IMPLEMENT_DYNAMIC(CSGMLine, CDialogEx)
 
@@ -46,7 +47,7 @@ END_MESSAGE_MAP()
 void CSGMLine::OnBnClickedAddButton()
 {
 	// TODO: 在此添加控件通知处理程序代码
-	UpdateData(TRUE);
+	UpdateData(true);
 	if (m_SGMQA.IsEmpty() || m_SGMLine.IsEmpty() || m_SGMTray.IsEmpty())
 	{
 		AfxMessageBox("填写内容不能为空！");
@@ -81,7 +82,6 @@ void CSGMLine::OnBnClickedAddButton()
 
 void CSGMLine::OnBnClickedCancelButton()
 {
-	// TODO: 在此添加控件通知处理程序代码
 	CDialogEx::OnCancel();
 }
 
@@ -90,15 +90,14 @@ BOOL CSGMLine::OnInitDialog()
 {
 	CDialogEx::OnInitDialog();
 
-	// TODO:  在此添加额外的初始化
 	m_SGMList.SetExtendedStyle(LVS_EX_FLATSB
 		|LVS_EX_FULLROWSELECT
 		|LVS_EX_HEADERDRAGDROP
 		|LVS_EX_ONECLICKACTIVATE
 		|LVS_EX_GRIDLINES);
-	m_SGMList.InsertColumn(0,"品质检员",LVCFMT_LEFT,120,0);
-	m_SGMList.InsertColumn(1,"生产线/拉",LVCFMT_LEFT,50,1);
-	m_SGMList.InsertColumn(2,"托盘容量",LVCFMT_LEFT,50,2);
+	m_SGMList.InsertColumn(0,"品质检员",LVCFMT_CENTER,60,0);
+	m_SGMList.InsertColumn(1,"生产线/拉",LVCFMT_CENTER,80,1);
+	m_SGMList.InsertColumn(2,"托盘容量",LVCFMT_CENTER,60,2);
 
 	CString sql = "select * from bSGMInfo";
 	m_pRs = theApp.m_pCon->Execute((_bstr_t)sql,NULL,adCmdText);
