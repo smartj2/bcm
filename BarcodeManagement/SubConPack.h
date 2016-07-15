@@ -13,7 +13,7 @@ class CSubConPack : public CDialogEx
 
 public:
 	_RecordsetPtr m_pRs; // 查询结果集
-//	void AddToGird();
+	CString TraySize;        // 托盘大小
 	CSubConPack(CWnd* pParent = NULL);   // 标准构造函数
 	virtual ~CSubConPack();
 
@@ -29,8 +29,27 @@ public:
 	virtual BOOL OnInitDialog();
 	virtual BOOL PreTranslateMessage(MSG* pMsg);
 	CString m_MarkBox;
+	CString m_Qty;
+	CString m_ATLCode;		//电芯码
+	CString m_MYCode;		//电池码
+	
+	CString m_SGMQA;
+	CString m_Remark;
+
+	CComboBox m_Model;
 	CComboBox m_MI;
-	CComboBox m_Qty;
+	CComboBox m_Material;
+	CComboBox m_ATLLen;
+	CComboBox m_MYLen;
+	CComboBox m_SGMLine;
+
+	CComboBox m_ATLWeek;
+	CComboBox m_MYWeek;
+	CListCtrl m_BCMList;
+	CProgressCtrl m_PackProgress;
+	
+	afx_msg void OnEnKillfocusPackEdit();
+	afx_msg void OnCbnSelchangeModelCombo();
 	afx_msg void OnEnChangeAtlcodeEdit();
 	afx_msg void OnEnChangeMycodeEdit();
 	afx_msg void OnBnClickedPackButton();
@@ -38,20 +57,9 @@ public:
 
 	bool CheckCoreCode(const CString& coreCode);
 	bool CheckBatteryCode(const CString& batteryCode);
-	CString m_ATLCode;		//电芯码
-	CComboBox m_ATLLen;
-	CComboBox m_ATLWeek;
-	CListCtrl m_BCMList;
-	CComboBox m_Material;
-	CComboBox m_Model;
-	CString m_MYCode;		//电池码
-	CComboBox m_MYLen;
-	CComboBox m_MYWeek;
-	CComboBox m_SGMQA;
-	CComboBox m_SGMLine;
+	
 	string CString2String(const CString cStr);
 	CString String2CString(const string str);
 	int CString2Int(const CString cStr);
 	CString Int2CString(const int num);
-	CProgressCtrl m_PackProgress;
 };

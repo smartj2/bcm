@@ -22,10 +22,11 @@ protected:
 
 	DECLARE_MESSAGE_MAP()
 public:
+	virtual BOOL OnInitDialog();
+	virtual BOOL PreTranslateMessage(MSG* pMsg);
 	CString m_Query;
 	CListCtrl m_ResultList;
 	CComboBox m_QueryType;
 	afx_msg void OnBnClickedQueryButton();
 	afx_msg void OnBnClickedExportButton();
-	virtual BOOL OnInitDialog();
 };

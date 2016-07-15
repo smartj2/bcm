@@ -142,7 +142,9 @@
   </ItemGroup>
   <ItemGroup>
     <Image Include="res\BarcodeManagement.ico" />
+    <Image Include="res\bitmap2.bmp" />
     <Image Include="res\login.bmp" />
+    <Image Include="res\main.bmp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

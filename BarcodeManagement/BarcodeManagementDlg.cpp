@@ -9,9 +9,9 @@
 #include "Login.h"
 #include "BISSetting.h"
 #include "SGMLine.h"
+#include "SinglePack.h"
 #include "CartonQuery.h"
 #include "SubConPack.h"
-#include "SinglePack.h"
 #include "AlertBox.h"
 
 #ifdef _DEBUG
@@ -71,10 +71,10 @@ BEGIN_MESSAGE_MAP(CBarcodeManagementDlg, CDialogEx)
 	ON_WM_QUERYDRAGICON()	
 	ON_COMMAND(ID_BIS_MENU, &CBarcodeManagementDlg::OnBISSetting)
 	ON_COMMAND(ID_SGM_MENU, &CBarcodeManagementDlg::OnSGMSetting)
+	ON_COMMAND(ID_SINGLE_MENU, &CBarcodeManagementDlg::OnSingleMenu)
 	ON_COMMAND(ID_PACK_MENU, &CBarcodeManagementDlg::OnCartonPacking)
 	ON_COMMAND(ID_INFO_MENU, &CBarcodeManagementDlg::OnCartonQuery)
 	ON_COMMAND(IDD_ABOUTBOX, &CBarcodeManagementDlg::OnAboutbox)
-	ON_COMMAND(ID_SINGLE_MENU, &CBarcodeManagementDlg::OnSingleMenu)
 END_MESSAGE_MAP()
 
 
@@ -117,7 +117,7 @@ BOOL CBarcodeManagementDlg::OnInitDialog()
 	}
 	if (dlg.DoModal() == IDCANCEL)
 	{
-		CDialog::OnCancel();
+		CDialogEx::OnCancel();
 	}
 
 	// 创建菜单
@@ -176,6 +176,17 @@ HCURSOR CBarcodeManagementDlg::OnQueryDragIcon()
 }
 
 
+BOOL CAboutDlg::OnInitDialog()
+{
+	CDialogEx::OnInitDialog();
+
+	// TODO:  在此添加额外的初始化
+
+	return TRUE;  // return TRUE unless you set the focus to a control
+	// 异常: OCX 属性页应返回 FALSE
+}
+
+
 void CBarcodeManagementDlg::OnBISSetting()
 {
 	CBISSetting dlg;
@@ -216,16 +227,4 @@ void CBarcodeManagementDlg::OnAboutbox()
 	CAboutDlg dlg;
 	dlg.DoModal();
 }
-
-
-BOOL CAboutDlg::OnInitDialog()
-{
-	CDialogEx::OnInitDialog();
-
-	// TODO:  在此添加额外的初始化
-
-	return TRUE;  // return TRUE unless you set the focus to a control
-	// 异常: OCX 属性页应返回 FALSE
-}
-
 

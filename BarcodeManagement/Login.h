@@ -16,9 +16,9 @@ public:
 	enum { IDD = IDD_LOGIN_DIALOG };
 
 	CString m_UserName;  // 用户名
-	CString m_PassWord;  // 密码
-	CButton m_Login;     // 登录按钮
-	CButton m_Cancel;    // 取消按钮
+	CString m_PassWord;   // 密码
+	CButton m_Login;        // 登录按钮
+	CButton m_Cancel;      // 取消按钮
 
 protected:
 	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV 支持

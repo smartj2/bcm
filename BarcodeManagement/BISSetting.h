@@ -28,9 +28,11 @@ public:
 	CString m_MI;
 	CString m_Model;
 	CString m_Qty;
+	CString m_Tray;
 	CString m_Supplier;
 	afx_msg void OnBnClickedAddButton();
 	afx_msg void OnBnClickedModButton();
 	afx_msg void OnBnClickedExitButton();
 	afx_msg void OnNMDblclkBisList(NMHDR *pNMHDR, LRESULT *pResult);
+	
 };

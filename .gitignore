@@ -1,8 +1,10 @@
 BarcodeManagement/Debug/
+BarcodeManagement/Release/
 BarcodeManagement/BarcodeManagement.aps
 Debug/
 ipch/
 Release/
 data/
+exports/
 BarcodeManagement.sdf
 BarcodeManagement.v11.suo

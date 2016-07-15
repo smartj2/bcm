@@ -33,8 +33,8 @@ protected:
 public:
 	afx_msg void OnBISSetting();
 	afx_msg void OnSGMSetting();
+	afx_msg void OnSingleMenu();
 	afx_msg void OnCartonPacking();
 	afx_msg void OnCartonQuery();
 	afx_msg void OnAboutbox();
-	afx_msg void OnSingleMenu();
 };

@@ -19,7 +19,9 @@ CBISSetting::CBISSetting(CWnd* pParent /*=NULL*/)
 	, m_MI(_T(""))
 	, m_Model(_T(""))
 	, m_Qty(_T(""))
+	, m_Tray(_T(""))
 	, m_Supplier(_T(""))
+
 {
 
 }
@@ -37,6 +39,7 @@ void CBISSetting::DoDataExchange(CDataExchange* pDX)
 	DDX_Text(pDX, IDC_MI_EDIT, m_MI);
 	DDX_Text(pDX, IDC_MODEL_EDIT, m_Model);
 	DDX_Text(pDX, IDC_QTY_EDIT, m_Qty);
+	DDX_Text(pDX, IDC_TRAY_EDIT, m_Tray);
 	DDX_Text(pDX, IDC_SUPPLIER_EDIT, m_Supplier);
 }
 
@@ -63,11 +66,12 @@ BOOL CBISSetting::OnInitDialog()
 		|LVS_EX_ONECLICKACTIVATE
 		|LVS_EX_GRIDLINES);
 	m_BISList.InsertColumn(0,"供应商",LVCFMT_CENTER,50,0);
-	m_BISList.InsertColumn(1,"型号",LVCFMT_CENTER,120,1);
+	m_BISList.InsertColumn(1,"电池型号",LVCFMT_CENTER,120,1);
 	m_BISList.InsertColumn(2,"MI",LVCFMT_CENTER,60,2);
 	m_BISList.InsertColumn(3,"码长度",LVCFMT_CENTER,60,3);
 	m_BISList.InsertColumn(4,"数量",LVCFMT_CENTER,60,4);
-	m_BISList.InsertColumn(5,"物料",LVCFMT_CENTER,80,5);
+	m_BISList.InsertColumn(5,"托盘数",LVCFMT_CENTER,60,5);
+	m_BISList.InsertColumn(6,"物料",LVCFMT_CENTER,60,6);
 
 	CString sql = "select * from bBISInfo";
 	m_pRs = theApp.m_pCon->Execute((_bstr_t)sql,NULL,adCmdText);
@@ -80,7 +84,8 @@ BOOL CBISSetting::OnInitDialog()
 		m_BISList.SetItemText(i,2,(char*)(_bstr_t)m_pRs->GetCollect("ProductMI"));
 		m_BISList.SetItemText(i,3,(char*)(_bstr_t)m_pRs->GetCollect("BarcodeLen"));
 		m_BISList.SetItemText(i,4,(char*)(_bstr_t)m_pRs->GetCollect("Quantity"));
-		m_BISList.SetItemText(i,5,(char*)(_bstr_t)m_pRs->GetCollect("Material"));
+		m_BISList.SetItemText(i,5,(char*)(_bstr_t)m_pRs->GetCollect("TraySize"));
+		m_BISList.SetItemText(i,6,(char*)(_bstr_t)m_pRs->GetCollect("Material"));
 		i++;
 		m_pRs->MoveNext();
 	}
@@ -101,9 +106,9 @@ void CBISSetting::OnBnClickedAddButton()
 		return;
 	}
 
-	CString sql = "insert into bBISInfo(Supplier,ProductModel,ProductMI,\
-		BarcodeLen,Quantity,Material) values('"+m_Supplier+"','"+m_Model+"',\
-		'"+m_MI+"','"+m_ATLLen+"','"+m_Qty+"','"+m_Material+"')";
+	CString sql = "insert into bBISInfo(Supplier,ProductModel,ProductMI, \
+						   BarcodeLen,Quantity,Material,TraySize) values('"+m_Supplier+"','"+m_Model+"', \
+						   '"+m_MI+"','"+m_ATLLen+"','"+m_Qty+"','"+m_Material+"','"+m_Tray+"')";
 
 	theApp.m_pCon->Execute((_bstr_t)sql,NULL,adCmdText);
 	m_BISList.DeleteAllItems();
@@ -118,7 +123,8 @@ void CBISSetting::OnBnClickedAddButton()
 		m_BISList.SetItemText(i,2,(char*)(_bstr_t)m_pRs->GetCollect("ProductMI"));
 		m_BISList.SetItemText(i,3,(char*)(_bstr_t)m_pRs->GetCollect("BarcodeLen"));
 		m_BISList.SetItemText(i,4,(char*)(_bstr_t)m_pRs->GetCollect("Quantity"));
-		m_BISList.SetItemText(i,5,(char*)(_bstr_t)m_pRs->GetCollect("Material"));
+		m_BISList.SetItemText(i,5,(char*)(_bstr_t)m_pRs->GetCollect("TraySize"));
+		m_BISList.SetItemText(i,6,(char*)(_bstr_t)m_pRs->GetCollect("Material"));
 		i++;
 		m_pRs->MoveNext();
 	}
@@ -138,7 +144,7 @@ void CBISSetting::OnBnClickedModButton()
 {
 	// TODO: 在此添加控件通知处理程序代码
 	UpdateData(true);
-	GetDlgItem(IDC_ADD_BUTTON)->EnableWindow(FALSE);
+	//GetDlgItem(IDC_ADD_BUTTON)->EnableWindow(FALSE);
 
 	if (m_Supplier.IsEmpty() || m_Model.IsEmpty() || m_MI.IsEmpty() 
 		|| m_ATLLen.IsEmpty() || m_Qty.IsEmpty() || m_Material.IsEmpty())
@@ -147,8 +153,9 @@ void CBISSetting::OnBnClickedModButton()
 		return;
 	}
 
-	CString sql = "update bBISInfo set Supplier='"+m_Supplier+"', ProductModel='"+m_Model+"',\
-		BarcodeLen='"+m_ATLLen+"', Quantity='"+m_Qty+"', Material='"+m_Material+"' where ProductMI='"+m_MI+"'";
+	CString sql = "update bBISInfo set Supplier='"+m_Supplier+"', ProductModel='"+m_Model+"', \
+						   BarcodeLen='"+m_ATLLen+"', Quantity='"+m_Qty+"', Material='"+m_Material+"', \
+						   TraySize='"+m_Tray+"' where ProductModel='"+m_Model+"'";
 
 	theApp.m_pCon->Execute((_bstr_t)sql,NULL,adCmdText);
 	m_BISList.DeleteAllItems();
@@ -163,7 +170,8 @@ void CBISSetting::OnBnClickedModButton()
 		m_BISList.SetItemText(i,2,(char*)(_bstr_t)m_pRs->GetCollect("ProductMI"));
 		m_BISList.SetItemText(i,3,(char*)(_bstr_t)m_pRs->GetCollect("BarcodeLen"));
 		m_BISList.SetItemText(i,4,(char*)(_bstr_t)m_pRs->GetCollect("Quantity"));
-		m_BISList.SetItemText(i,5,(char*)(_bstr_t)m_pRs->GetCollect("Material"));
+		m_BISList.SetItemText(i,5,(char*)(_bstr_t)m_pRs->GetCollect("TraySize"));
+		m_BISList.SetItemText(i,6,(char*)(_bstr_t)m_pRs->GetCollect("Material"));
 		i++;
 		m_pRs->MoveNext();
 	}
@@ -173,6 +181,7 @@ void CBISSetting::OnBnClickedModButton()
 	m_MI = "";
 	m_ATLLen = "";
 	m_Qty = "";
+	m_Tray = "";
 	m_Material = "";
 
 	UpdateData(false);
@@ -196,7 +205,8 @@ void CBISSetting::OnNMDblclkBisList(NMHDR *pNMHDR, LRESULT *pResult)
 	m_MI = m_BISList.GetItemText(i,2);
 	m_ATLLen = m_BISList.GetItemText(i,3);
 	m_Qty = m_BISList.GetItemText(i,4);
-	m_Material = m_BISList.GetItemText(i,5);
+	m_Tray = m_BISList.GetItemText(i,5);
+	m_Material = m_BISList.GetItemText(i,6);
 
 	UpdateData(false);
 

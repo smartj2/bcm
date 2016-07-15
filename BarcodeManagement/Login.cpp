@@ -96,7 +96,7 @@ BOOL CLogin::PreTranslateMessage(MSG* pMsg)
 
 		if (rc.PtInRect(point))
 		{
-			CDialog::OnCancel();
+			CDialogEx::OnCancel();
 		}
 	}
 

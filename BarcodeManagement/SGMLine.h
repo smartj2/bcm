@@ -21,11 +21,17 @@ protected:
 
 	DECLARE_MESSAGE_MAP()
 public:
-	CListCtrl m_SGMList;
-	CString m_SGMQA;
-	CString m_SGMLine;
-	CString m_SGMTray;
-	afx_msg void OnBnClickedAddButton();
-	afx_msg void OnBnClickedCancelButton();
 	virtual BOOL OnInitDialog();
+	CListCtrl m_SGMList;
+
+	CString m_Model;
+	CString m_BMI;
+	CString m_Year;
+	CString m_Capacity;
+	CString m_MYLen;
+
+	afx_msg void OnBnClickedAddButton();
+	afx_msg void OnBnClickedModButton();
+	afx_msg void OnBnClickedCancelButton();
+	afx_msg void OnNMDblclkSgmList(NMHDR *pNMHDR, LRESULT *pResult);
 };

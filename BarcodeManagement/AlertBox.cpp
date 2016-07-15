@@ -58,10 +58,13 @@ BOOL CAlertBox::OnInitDialog()
 
 BOOL CAlertBox::PreTranslateMessage(MSG* pMsg)
 {
-	// TODO: 在此添加专用代码和/或调用基类
-	if (pMsg->message == WM_KEYDOWN && pMsg->wParam == 13)
+	// 取消键盘输入回车事件
+	if (pMsg->message == WM_KEYDOWN)
 	{
-		pMsg->wParam = 9;
+		if (pMsg->wParam == VK_RETURN)
+		{
+			return TRUE;
+		}
 	}
 
 	if (pMsg->message == WM_LBUTTONDOWN)

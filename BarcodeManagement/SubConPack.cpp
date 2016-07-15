@@ -20,8 +20,11 @@ IMPLEMENT_DYNAMIC(CSubConPack, CDialogEx)
 CSubConPack::CSubConPack(CWnd* pParent /*=NULL*/)
 	: CDialogEx(CSubConPack::IDD, pParent)
 	, m_MarkBox(_T(""))
+	, m_Qty(_T(""))
 	, m_ATLCode(_T(""))
 	, m_MYCode(_T(""))
+	, m_SGMQA(_T(""))
+	, m_Remark(_T(""))
 {
 
 }
@@ -34,29 +37,32 @@ void CSubConPack::DoDataExchange(CDataExchange* pDX)
 {
 	CDialogEx::DoDataExchange(pDX);
 	DDX_Text(pDX, IDC_PACK_EDIT, m_MarkBox);
-	DDX_Control(pDX, IDC_MI_COMBO, m_MI);
-	DDX_Control(pDX, IDC_QTY_COMBO, m_Qty);
+	DDX_Text(pDX, IDC_QTY_EDIT, m_Qty);
 	DDX_Text(pDX, IDC_ATLCODE_EDIT, m_ATLCode);
-	DDX_Control(pDX, IDC_ATLLEN_COMBO, m_ATLLen);
-	DDX_Control(pDX, IDC_ATLWEEK_COMBO, m_ATLWeek);
-	DDX_Control(pDX, IDC_BCM_LIST, m_BCMList);
-	DDX_Control(pDX, IDC_MATERIAL_COMBO, m_Material);
-	DDX_Control(pDX, IDC_MODEL_COMBO, m_Model);
 	DDX_Text(pDX, IDC_MYCODE_EDIT, m_MYCode);
+	DDX_Text(pDX, IDC_SGMQA_EDIT, m_SGMQA);
+	DDX_Text(pDX, IDC_REMARK_EDIT, m_Remark);
+	DDX_Control(pDX, IDC_MODEL_COMBO, m_Model);
+	DDX_Control(pDX, IDC_MI_COMBO, m_MI);
+	DDX_Control(pDX, IDC_MATERIAL_COMBO, m_Material);
+	DDX_Control(pDX, IDC_ATLLEN_COMBO, m_ATLLen);
 	DDX_Control(pDX, IDC_MYLEN_COMBO, m_MYLen);
-	DDX_Control(pDX, IDC_MYWEEK_COMBO, m_MYWeek);
-	DDX_Control(pDX, IDC_SGMQA_COMB, m_SGMQA);
 	DDX_Control(pDX, IDC_SGMLINE_COMBO, m_SGMLine);
+	DDX_Control(pDX, IDC_ATLWEEK_COMBO, m_ATLWeek);
+	DDX_Control(pDX, IDC_MYWEEK_COMBO, m_MYWeek);
+	DDX_Control(pDX, IDC_BCM_LIST, m_BCMList);
 	DDX_Control(pDX, IDC_PACK_PROGRESS, m_PackProgress);
 }
 
 
 BEGIN_MESSAGE_MAP(CSubConPack, CDialogEx)
 	ON_LBN_SELCHANGE(IDC_LIST1, &CSubConPack::OnLbnSelchangeList1)
+	ON_EN_KILLFOCUS(IDC_PACK_EDIT, &CSubConPack::OnEnKillfocusPackEdit)
 	ON_EN_CHANGE(IDC_ATLCODE_EDIT, &CSubConPack::OnEnChangeAtlcodeEdit)
 	ON_EN_CHANGE(IDC_MYCODE_EDIT, &CSubConPack::OnEnChangeMycodeEdit)
 	ON_BN_CLICKED(IDC_PACK_BUTTON, &CSubConPack::OnBnClickedPackButton)
 	ON_BN_CLICKED(IDC_EXIT_BUTTON, &CSubConPack::OnBnClickedExitButton)
+	ON_CBN_SELCHANGE(IDC_MODEL_COMBO, &CSubConPack::OnCbnSelchangeModelCombo)
 END_MESSAGE_MAP()
 
 
@@ -87,19 +93,17 @@ BOOL CSubConPack::OnInitDialog()
 	if(m_pRs->GetRecordCount()==1)
 	{
 		m_Model.AddString((char*)(_bstr_t)m_pRs->GetCollect("ProductModel"));
-		m_MI.AddString((char*)(_bstr_t)m_pRs->GetCollect("ProductMI"));
-		m_Material.AddString((char*)(_bstr_t)m_pRs->GetCollect("Material"));
-		m_Qty.AddString((char*)(_bstr_t)m_pRs->GetCollect("Quantity"));
-		m_ATLLen.AddString((char*)(_bstr_t)m_pRs->GetCollect("BarcodeLen"));
+		//m_MI.AddString((char*)(_bstr_t)m_pRs->GetCollect("ProductMI"));
+		//m_Material.AddString((char*)(_bstr_t)m_pRs->GetCollect("Material"));
+		//m_ATLLen.AddString((char*)(_bstr_t)m_pRs->GetCollect("BarcodeLen"));
 		return TRUE;
 	}
 	while(!m_pRs->adoEOF)
 	{
 		m_Model.AddString((char*)(_bstr_t)m_pRs->GetCollect("ProductModel"));
-		m_MI.AddString((char*)(_bstr_t)m_pRs->GetCollect("ProductMI"));
-		m_Material.AddString((char*)(_bstr_t)m_pRs->GetCollect("Material"));
-		m_Qty.AddString((char*)(_bstr_t)m_pRs->GetCollect("Quantity"));
-		m_ATLLen.AddString((char*)(_bstr_t)m_pRs->GetCollect("BarcodeLen"));
+		//m_MI.AddString((char*)(_bstr_t)m_pRs->GetCollect("ProductMI"));
+		//m_Material.AddString((char*)(_bstr_t)m_pRs->GetCollect("Material"));
+		//m_ATLLen.AddString((char*)(_bstr_t)m_pRs->GetCollect("BarcodeLen"));
 		m_pRs->MoveNext();
 	}
 
@@ -118,33 +122,31 @@ BOOL CSubConPack::OnInitDialog()
 		m_Day.AddString(Int2CString(i));
 	}*/
 
-	m_MYLen.AddString("12");
-	m_MYLen.AddString("13");
+	//m_MYLen.AddString("12");
+	//m_MYLen.AddString("13");
 
-	for (int i = 0; i < 10; i++)
-	{
-		std::string strLine = boost::str(boost::format("%s") % ('A'+i));
-		m_SGMLine.AddString(String2CString(strLine)); // 电芯周期
-	}
-	/*m_SGMLine.AddString("A");
+	//for (int i = 0; i < 10; i++)
+	//{
+	//	std::string strLine = boost::str(boost::format("%s") % ('A'+i));
+	//	m_SGMLine.AddString(String2CString(strLine)); // 电芯周期
+	//}
+
+	m_SGMLine.AddString("A");
 	m_SGMLine.AddString("B");
 	m_SGMLine.AddString("C");
-	m_SGMLine.AddString("D");*/
+	m_SGMLine.AddString("D");
 
-	m_SGMQA.AddString("BM-SIGEMA");
-	m_SGMQA.AddString("Li");
+	//GetDlgItem(IDC_QTY_EDIT)->SetWindowText("540");
 
 	// 初始化默认选项
 	m_Model.SetCurSel(0);
-	m_MI.SetCurSel(1);
-	m_Material.SetCurSel(1);
-	m_Qty.SetCurSel(0);
-	m_ATLLen.SetCurSel(0);
-	m_MYLen.SetCurSel(1);
-	m_SGMLine.SetCurSel(0);
-	m_SGMQA.SetCurSel(1);
-	m_ATLWeek.SetCurSel(20);
-	m_MYWeek.SetCurSel(26);
+	//m_MI.SetCurSel(1);
+	//m_Material.SetCurSel(1);
+	//m_ATLLen.SetCurSel(0);
+	//m_MYLen.SetCurSel(1);
+	//m_SGMLine.SetCurSel(0);
+	m_ATLWeek.SetCurSel(21);
+	m_MYWeek.SetCurSel(27);
 
 	m_BCMList.SetExtendedStyle(LVS_EX_FLATSB
 		|LVS_EX_FULLROWSELECT
@@ -156,13 +158,12 @@ BOOL CSubConPack::OnInitDialog()
 	m_BCMList.InsertColumn(0, "序号", LVCFMT_CENTER, 50, 0);
 	m_BCMList.InsertColumn(1, "托盘号", LVCFMT_CENTER, 50, 1);
 	m_BCMList.InsertColumn(2, "外箱条码", LVCFMT_CENTER, 100, 2);
-	m_BCMList.InsertColumn(3, "电芯代码", LVCFMT_CENTER, 120, 3);
-	m_BCMList.InsertColumn(4, "电池条码", LVCFMT_CENTER, 120, 4);
-	m_BCMList.InsertColumn(5, "组装条码", LVCFMT_CENTER, 120, 5);
+	m_BCMList.InsertColumn(3, "电芯型号", LVCFMT_CENTER, 120, 3);
+	m_BCMList.InsertColumn(4, "电芯条码", LVCFMT_CENTER, 120, 4);
+	m_BCMList.InsertColumn(5, "电池条码", LVCFMT_CENTER, 120, 5);
 	m_BCMList.InsertColumn(6, "品质检员", LVCFMT_CENTER, 100, 6);
 	m_BCMList.InsertColumn(7, "扫码时间", LVCFMT_CENTER, 120, 7);
-
-	//	AddToList();
+	m_BCMList.InsertColumn(8, "备注", LVCFMT_CENTER, 120, 8);
 
 	return TRUE;  // return TRUE unless you set the focus to a control
 	// 异常: OCX 属性页应返回 FALSE
@@ -171,7 +172,6 @@ BOOL CSubConPack::OnInitDialog()
 
 BOOL CSubConPack::PreTranslateMessage(MSG* pMsg)
 {
-	// TODO: 在此添加专用代码和/或调用基类
 	if (pMsg->message == WM_KEYDOWN)
 	{
 		if (pMsg->wParam == VK_RETURN)
@@ -179,11 +179,83 @@ BOOL CSubConPack::PreTranslateMessage(MSG* pMsg)
 			return TRUE;
 		}
 	}
-	//if (pMsg->message == WM_KEYDOWN && pMsg->wParam == 13)
-	//{
-	//	pMsg->wParam = 9;
-	//}
+	
 	return CDialogEx::PreTranslateMessage(pMsg);
+}
+
+
+void CSubConPack::OnEnKillfocusPackEdit()
+{
+	// TODO: 在此添加控件通知处理程序代码
+	//UpdateData(true);
+	//CString sql = "select * from bSubCon where MarkBox='"+m_MarkBox+"'";
+
+	//try
+	//{
+	//	theApp.m_pCon->Execute((_bstr_t)sql,NULL,adCmdText);
+	//	if (!m_MarkBox.IsEmpty() && m_pRs->Fields->Count != 0)
+	//	{
+	//		AfxMessageBox("箱号已存在！");
+	//		m_MarkBox = "";
+	//		GetDlgItem(IDC_PACK_EDIT)->SetFocus();
+	//		UpdateData(false);
+	//		return;
+	//	}
+	//} catch(_com_error e)
+	//{
+	//	AfxMessageBox(e.Description());
+	//}  
+}
+
+
+void CSubConPack::OnCbnSelchangeModelCombo()
+{
+	UpdateData(true);
+
+	CString model;
+	m_Model.GetLBText(m_Model.GetCurSel(), model);
+
+	CString sql1 = "select * from bBISInfo where ProductModel='"+model+"'";
+	try
+	{
+		m_pRs = theApp.m_pCon->Execute((_bstr_t)sql1,NULL,adCmdText);
+
+	} catch(_com_error e)
+	{
+		AfxMessageBox(e.Description());
+	}
+	
+	if(!m_pRs->adoEOF)
+	{
+		m_MI.InsertString(0,(char*)(_bstr_t)m_pRs->GetCollect("ProductMI"));
+		m_Material.InsertString(0,(char*)(_bstr_t)m_pRs->GetCollect("Material"));
+		m_ATLLen.InsertString(0,(char*)(_bstr_t)m_pRs->GetCollect("BarcodeLen"));
+		m_Qty   = (char*)(_bstr_t)m_pRs->GetCollect("Quantity");
+		TraySize = (char*)(_bstr_t)m_pRs->GetCollect("TraySize");
+	}
+
+	m_MI.SetCurSel(0);
+	m_Material.SetCurSel(0);
+	m_ATLLen.SetCurSel(0);
+
+	// 获取电池码长
+	CString sql2 = "select * from bSGMInfo where ProductModel='"+model+"'";
+	try
+	{
+		m_pRs = theApp.m_pCon->Execute((_bstr_t)sql2,NULL,adCmdText);
+
+	} catch(_com_error e)
+	{
+		AfxMessageBox(e.Description());
+	}
+	
+	if(!m_pRs->adoEOF)
+	{
+		m_MYLen.InsertString(0,(char*)(_bstr_t)m_pRs->GetCollect("MYLen"));
+	}
+	m_MYLen.SetCurSel(0);
+
+	UpdateData(false);
 }
 
 
@@ -195,28 +267,20 @@ void CSubConPack::OnEnChangeAtlcodeEdit()
 	// 同时将 ENM_CHANGE 标志“或”运算到掩码中。
 
 	// TODO:  在此添加控件通知处理程序代码
-	UpdateData(TRUE);
+	UpdateData(true);
 
 	if (m_MarkBox == "")
 	{
-		/*CAlertBox dlg;
-		dlg.DoModal();
-		SetDlgItemText(IDC_INFO_STATIC,  "外箱条码不能为空！");*/
-		//UpdateData(FALSE);
 		AfxMessageBox("外箱条码不能为空!");
 		m_ATLCode = "";
 		m_MYCode =  "";
-		UpdateData(FALSE);
+		UpdateData(false);
 		GetDlgItem(IDC_PACK_EDIT)->SetFocus();
 		return;
 	}
-//	CTime Time;
-//	Time = CTime::GetCurrentTime();
-//	CString scanTime = Time.Format("%Y-%m-%d %H:%M:%S");
 
 	CString model;
 	m_Model.GetLBText(m_Model.GetCurSel(), model);
-//	AfxMessageBox(model);
 	CString atlLen;
 	m_ATLLen.GetLBText(m_ATLLen.GetCurSel(), atlLen);
 
@@ -224,15 +288,11 @@ void CSubConPack::OnEnChangeAtlcodeEdit()
 	{
 		if (!CheckCoreCode(m_ATLCode))
 		{
-			/*CAlertBox dlg;
-			dlg.DoModal();
-			SetDlgItemText(IDC_INFO_STATIC,  "电芯码非法！！！");*/
-
 			AfxMessageBox("");
 			AfxMessageBox("电芯码非法！！！");
 			m_ATLCode = "";
 			m_MYCode =  "";
-			UpdateData(FALSE);
+			UpdateData(false);
 			GetDlgItem(IDC_ATLCODE_EDIT)->SetFocus();
 			return;
 		}
@@ -244,7 +304,7 @@ void CSubConPack::OnEnChangeAtlcodeEdit()
 		m_BCMList.SetItemText(bnum-1,4,m_ATLCode);
 		
 		m_MYCode =  "";
-		UpdateData(FALSE);
+		UpdateData(false);
 
 		GetDlgItem(IDC_MYCODE_EDIT)->SetFocus();
 	}
@@ -258,19 +318,14 @@ void CSubConPack::OnEnChangeMycodeEdit()
 	// 函数并调用 CRichEditCtrl().SetEventMask()，
 	// 同时将 ENM_CHANGE 标志“或”运算到掩码中。
 
-	// TODO:  在此添加控件通知处理程序代码
-	UpdateData(TRUE);
+	UpdateData(true);
 
 	if (m_ATLCode == "")
 	{
-		/*CAlertBox dlg;
-		dlg.DoModal();
-		SetDlgItemText(IDC_INFO_STATIC,  "请先扫电芯！");*/
-
 		AfxMessageBox("");
 		AfxMessageBox("请先扫电芯！");
 		m_MYCode = "";
-		UpdateData(FALSE);
+		UpdateData(false);
 
 		GetDlgItem(IDC_ATLCODE_EDIT)->SetFocus();
 		return;
@@ -287,23 +342,15 @@ void CSubConPack::OnEnChangeMycodeEdit()
 	{
 		if (!CheckBatteryCode(m_MYCode))
 		{
-			/*CAlertBox dlg;
-			dlg.DoModal();
-			SetDlgItemText(IDC_INFO_STATIC,  "电池码非法！！！");*/
-
 			AfxMessageBox("");
 			AfxMessageBox("电池码非法！！！");
 			m_ATLCode = "";
 			m_MYCode = "";
 
-			m_BCMList.SetItemText(bnum-1,0,"");
-			m_BCMList.SetItemText(bnum-1,1,"");
-			m_BCMList.SetItemText(bnum-1,2,"");
-			m_BCMList.SetItemText(bnum-1,3,"");
-			m_BCMList.SetItemText(bnum-1,4,"");
-			m_BCMList.SetItemText(bnum-1,5,"");
-			m_BCMList.SetItemText(bnum-1,6,"");
-			m_BCMList.SetItemText(bnum-1,7,"");
+			for (int i = 0; i < 8; i++)
+			{
+				m_BCMList.SetItemText(bnum-1,i,"");
+			}
 
 			UpdateData(FALSE);
 
@@ -311,13 +358,14 @@ void CSubConPack::OnEnChangeMycodeEdit()
 			return;
 		}
 		m_BCMList.SetItemText(bnum-1,5,m_MYCode);
-		m_BCMList.SetItemText(bnum-1,6,theApp.name);
+		m_BCMList.SetItemText(bnum-1,6,m_SGMQA);
 		m_BCMList.SetItemText(bnum-1,7,scanTime);
+		m_BCMList.SetItemText(bnum-1,8,m_Remark);
 		
 		//AfxMessageBox(m_ATLCode+","+m_MYCode);
 		//将条码存入数据库
-		CString sql = "insert into bBarcode(MarkBox,ATLBarcode,MYBarcode,ScanTime)\
-			values('"+m_MarkBox+"','"+m_ATLCode+"','"+m_MYCode+"','"+scanTime+"')";
+		CString sql = "insert into bDoubleBarcode(MarkBox,ATLBarcode,MYBarcode,ScanTime,Remark)\
+					  values('"+m_MarkBox+"','"+m_ATLCode+"','"+m_MYCode+"','"+scanTime+"','"+m_Remark+"')";
 
 		try
 		{
@@ -332,40 +380,34 @@ void CSubConPack::OnEnChangeMycodeEdit()
 			m_ATLCode = "";
 			m_MYCode = "";
 
-			m_BCMList.SetItemText(bnum-1,0,"");
-			m_BCMList.SetItemText(bnum-1,1,"");
-			m_BCMList.SetItemText(bnum-1,2,"");
-			m_BCMList.SetItemText(bnum-1,3,"");
-			m_BCMList.SetItemText(bnum-1,4,"");
-			m_BCMList.SetItemText(bnum-1,5,"");
-			m_BCMList.SetItemText(bnum-1,6,"");
-			m_BCMList.SetItemText(bnum-1,7,"");
+			for (int i = 0; i < 9; i++)
+			{
+				m_BCMList.SetItemText(bnum-1,i,"");
+			}
 
-			UpdateData(FALSE);
+			UpdateData(false);
 			GetDlgItem(IDC_ATLCODE_EDIT)->SetFocus();
 
 			return;
 		}
 
 		//设置进度度
-		m_PackProgress.SetRange(1, 540);
+		m_PackProgress.SetRange(1, CString2Int(m_Qty));
 		m_PackProgress.SetStep(1);
 		m_PackProgress.StepIt();
 
 		m_ATLCode =  "";
-		UpdateData(FALSE);
+		UpdateData(false);
 
 		GetDlgItem(IDC_ATLCODE_EDIT)->SetFocus();
 
-		if (bnum%20 == 0)
+		int tsize = CString2Int(TraySize);
+		if ((bnum+1)%tsize == 0)
 		{
 			tray = tray + 1;
 		}
 
-		CString packNum;
-		//m_Qty.GetLBText(m_Qty.GetCurSel(), packNum);
-		m_Qty.GetWindowText(packNum);
-		if (bnum-1 == CString2Int(packNum))
+		if (bnum-1 == CString2Int(m_Qty))
 		{
 			AfxMessageBox("");
 			AfxMessageBox("扫描完毕！请打包！");
@@ -376,16 +418,13 @@ void CSubConPack::OnEnChangeMycodeEdit()
 			CString line;
 			m_SGMLine.GetLBText(m_SGMLine.GetCurSel(), line);
 
-			CString qa;
-			m_SGMQA.GetLBText(m_SGMQA.GetCurSel(), qa);
-
 			CString sql = "insert into bSubCon(ProductModel,MarkBox,MYLine,MYQA) \
-				values('"+model+"','"+m_MarkBox+"','"+line+"','"+qa+"')";
+						  values('"+model+"','"+m_MarkBox+"','"+line+"','"+m_SGMQA+"')";
 
 			theApp.m_pCon->Execute((_bstr_t)sql,NULL,adCmdText);
 
 			m_MYCode =  "";
-			UpdateData(FALSE);
+			UpdateData(false);
 			return;
 		}
 	}
@@ -394,20 +433,14 @@ void CSubConPack::OnEnChangeMycodeEdit()
 
 void CSubConPack::OnBnClickedPackButton()
 {
-	// TODO: 在此添加控件通知处理程序代码
 	UpdateData(true);
 
-	CString packNum;
-	//m_Qty.GetLBText(m_Qty.GetCurSel(), packNum);
-	m_Qty.GetWindowText(packNum);
-
-	if (bnum < CString2Int(packNum))
+	if (bnum < CString2Int(m_Qty))
 	{
 		AfxMessageBox("还不够一箱，请继续扫描！");
-		AfxMessageBox(packNum);
 		return;
 	}
-	else if (bnum-1 == CString2Int(packNum))
+	else if (bnum-1 == CString2Int(m_Qty))
 	{
 		AfxMessageBox("打包成功！");
 		bnum = 1;   // 计数回到1
@@ -425,7 +458,6 @@ void CSubConPack::OnBnClickedPackButton()
 
 void CSubConPack::OnBnClickedExitButton()
 {
-	// TODO: 在此添加控件通知处理程序代码
 	CDialogEx::OnCancel();
 }
 
@@ -455,6 +487,7 @@ bool CSubConPack::CheckCoreCode(const CString& coreCode)
 	boost::regex reg(strType + strYear + strWeek + "[0-9A-Z]{6}");
 	return boost::regex_match(strCoreCode, reg);
 }
+
 
 bool CSubConPack::CheckBatteryCode(const CString& batteryCode)
 {
@@ -540,3 +573,5 @@ CString CSubConPack::Int2CString(const int num)
 
 	return (LPCTSTR)temp;
 }
+
+
