@@ -34,6 +34,7 @@ public:
 	CString m_MYCode;		//µç³ØÂë
 	
 	CString m_SGMQA;
+	CString m_SGMLine;
 	CString m_Remark;
 
 	CComboBox m_Model;
@@ -41,7 +42,6 @@ public:
 	CComboBox m_Material;
 	CComboBox m_ATLLen;
 	CComboBox m_MYLen;
-	CComboBox m_SGMLine;
 
 	CComboBox m_ATLWeek;
 	CComboBox m_MYWeek;

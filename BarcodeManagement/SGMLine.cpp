@@ -129,7 +129,7 @@ void CSGMLine::OnBnClickedAddButton()
 	m_Capacity = "";
 	m_MYLen = "";
 
-	UpdateData(FALSE);
+	UpdateData(false);
 }
 
 

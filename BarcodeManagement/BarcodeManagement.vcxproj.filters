@@ -104,9 +104,6 @@
     <Image Include="res\login.bmp">
       <Filter>资源文件</Filter>
     </Image>
-    <Image Include="res\bitmap2.bmp">
-      <Filter>资源文件</Filter>
-    </Image>
     <Image Include="res\main.bmp">
       <Filter>资源文件</Filter>
     </Image>

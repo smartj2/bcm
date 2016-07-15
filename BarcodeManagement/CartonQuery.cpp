@@ -65,14 +65,15 @@ BOOL CCartonQuery::OnInitDialog()
 		|LVS_EX_HEADERDRAGDROP
 		|LVS_EX_ONECLICKACTIVATE
 		|LVS_EX_GRIDLINES);
-	m_ResultList.InsertColumn(0,"电池型号",LVCFMT_CENTER,120,0);
-	m_ResultList.InsertColumn(1,"外箱条码",LVCFMT_CENTER,100,1);
-	m_ResultList.InsertColumn(2,"电芯条码",LVCFMT_CENTER,100,2);
-	m_ResultList.InsertColumn(3,"电池条码",LVCFMT_CENTER,100,3);
-	m_ResultList.InsertColumn(4,"操作员",LVCFMT_CENTER,60,4);
-	m_ResultList.InsertColumn(5,"生产线/拉",LVCFMT_CENTER,80,5);
-	m_ResultList.InsertColumn(6,"扫描时间",LVCFMT_CENTER,120,6);
-	m_ResultList.InsertColumn(7,"备注信息",LVCFMT_CENTER,100,7);
+	m_ResultList.InsertColumn(0,"序号",LVCFMT_CENTER,40,0);
+	m_ResultList.InsertColumn(1,"电池型号",LVCFMT_CENTER,120,1);
+	m_ResultList.InsertColumn(2,"外箱条码",LVCFMT_CENTER,100,2);
+	m_ResultList.InsertColumn(3,"电芯条码",LVCFMT_CENTER,100,3);
+	m_ResultList.InsertColumn(4,"电池条码",LVCFMT_CENTER,100,4);
+	m_ResultList.InsertColumn(5,"操作员",LVCFMT_CENTER,60,5);
+	m_ResultList.InsertColumn(6,"生产线/拉",LVCFMT_CENTER,80,6);
+	m_ResultList.InsertColumn(7,"扫描时间",LVCFMT_CENTER,100,7);
+	m_ResultList.InsertColumn(8,"备注信息",LVCFMT_CENTER,100,8);
 
 	UpdateData(false);
 
@@ -133,20 +134,24 @@ void CCartonQuery::OnBnClickedQueryButton()
 	{
 		AfxMessageBox(e.Description());
 	}
-	UpdateData(FALSE);
+	UpdateData(false);
 
 	int i = 0;
 	while(!m_pRs->adoEOF)
 	{
+		CString count;
+		count.Format(_T("%d"),(i+1));
+
 		m_ResultList.InsertItem(i,"");
-		m_ResultList.SetItemText(i,0,(char*)(_bstr_t)m_pRs->GetCollect("ProductModel"));
-		m_ResultList.SetItemText(i,1,(char*)(_bstr_t)m_pRs->GetCollect("MarkBox"));
-		m_ResultList.SetItemText(i,2,(char*)(_bstr_t)m_pRs->GetCollect("ATLBarcode"));
-		m_ResultList.SetItemText(i,3,(char*)(_bstr_t)m_pRs->GetCollect("MYBarcode"));
-		m_ResultList.SetItemText(i,4,(char*)(_bstr_t)m_pRs->GetCollect("MYQA"));
-		m_ResultList.SetItemText(i,5,(char*)(_bstr_t)m_pRs->GetCollect("MYLine"));
-		m_ResultList.SetItemText(i,6,(char*)(_bstr_t)m_pRs->GetCollect("ScanTime"));
-		m_ResultList.SetItemText(i,7,(char*)(_bstr_t)m_pRs->GetCollect("Remark"));
+		m_ResultList.SetItemText(i,0,(LPCTSTR)count);
+		m_ResultList.SetItemText(i,1,(char*)(_bstr_t)m_pRs->GetCollect("ProductModel"));
+		m_ResultList.SetItemText(i,2,(char*)(_bstr_t)m_pRs->GetCollect("MarkBox"));
+		m_ResultList.SetItemText(i,3,(char*)(_bstr_t)m_pRs->GetCollect("ATLBarcode"));
+		m_ResultList.SetItemText(i,4,(char*)(_bstr_t)m_pRs->GetCollect("MYBarcode"));
+		m_ResultList.SetItemText(i,5,(char*)(_bstr_t)m_pRs->GetCollect("MYQA"));
+		m_ResultList.SetItemText(i,6,(char*)(_bstr_t)m_pRs->GetCollect("MYLine"));
+		m_ResultList.SetItemText(i,7,(char*)(_bstr_t)m_pRs->GetCollect("ScanTime"));
+		m_ResultList.SetItemText(i,8,(char*)(_bstr_t)m_pRs->GetCollect("Remark"));
 		i++;
 
 		m_pRs->MoveNext();

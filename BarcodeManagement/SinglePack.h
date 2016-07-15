@@ -32,11 +32,12 @@ public:
 	CString m_SGMQA;
 	CString m_Remark;
 	CString m_ATLCode;
+	CString m_SGMLine;
+
 	CComboBox m_Model;
 	CComboBox m_MI;
 	CComboBox m_Material;
 	CComboBox m_ATLLen;
-	CComboBox m_SGMLine;
 	CComboBox m_ATLWeek;
 	CListCtrl m_BCMList;
 	afx_msg void OnCbnSelchangeModelCombo();

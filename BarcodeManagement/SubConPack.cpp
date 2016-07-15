@@ -25,6 +25,7 @@ CSubConPack::CSubConPack(CWnd* pParent /*=NULL*/)
 	, m_MYCode(_T(""))
 	, m_SGMQA(_T(""))
 	, m_Remark(_T(""))
+	, m_SGMLine(_T(""))
 {
 
 }
@@ -41,13 +42,13 @@ void CSubConPack::DoDataExchange(CDataExchange* pDX)
 	DDX_Text(pDX, IDC_ATLCODE_EDIT, m_ATLCode);
 	DDX_Text(pDX, IDC_MYCODE_EDIT, m_MYCode);
 	DDX_Text(pDX, IDC_SGMQA_EDIT, m_SGMQA);
+	DDX_Text(pDX, IDC_SGMLINE_EDIT, m_SGMLine);
 	DDX_Text(pDX, IDC_REMARK_EDIT, m_Remark);
 	DDX_Control(pDX, IDC_MODEL_COMBO, m_Model);
 	DDX_Control(pDX, IDC_MI_COMBO, m_MI);
 	DDX_Control(pDX, IDC_MATERIAL_COMBO, m_Material);
 	DDX_Control(pDX, IDC_ATLLEN_COMBO, m_ATLLen);
 	DDX_Control(pDX, IDC_MYLEN_COMBO, m_MYLen);
-	DDX_Control(pDX, IDC_SGMLINE_COMBO, m_SGMLine);
 	DDX_Control(pDX, IDC_ATLWEEK_COMBO, m_ATLWeek);
 	DDX_Control(pDX, IDC_MYWEEK_COMBO, m_MYWeek);
 	DDX_Control(pDX, IDC_BCM_LIST, m_BCMList);
@@ -131,10 +132,10 @@ BOOL CSubConPack::OnInitDialog()
 	//	m_SGMLine.AddString(String2CString(strLine)); // 电芯周期
 	//}
 
-	m_SGMLine.AddString("A");
-	m_SGMLine.AddString("B");
-	m_SGMLine.AddString("C");
-	m_SGMLine.AddString("D");
+	//m_SGMLine.AddString("A");
+	//m_SGMLine.AddString("B");
+	//m_SGMLine.AddString("C");
+	//m_SGMLine.AddString("D");
 
 	//GetDlgItem(IDC_QTY_EDIT)->SetWindowText("540");
 
@@ -164,6 +165,8 @@ BOOL CSubConPack::OnInitDialog()
 	m_BCMList.InsertColumn(6, "品质检员", LVCFMT_CENTER, 100, 6);
 	m_BCMList.InsertColumn(7, "扫码时间", LVCFMT_CENTER, 120, 7);
 	m_BCMList.InsertColumn(8, "备注", LVCFMT_CENTER, 120, 8);
+
+	GetDlgItem(IDC_PACK_EDIT)->SetFocus();
 
 	return TRUE;  // return TRUE unless you set the focus to a control
 	// 异常: OCX 属性页应返回 FALSE
@@ -347,12 +350,12 @@ void CSubConPack::OnEnChangeMycodeEdit()
 			m_ATLCode = "";
 			m_MYCode = "";
 
-			for (int i = 0; i < 8; i++)
+			for (int i = 0; i < 5; i++)
 			{
 				m_BCMList.SetItemText(bnum-1,i,"");
 			}
 
-			UpdateData(FALSE);
+			UpdateData(false);
 
 			GetDlgItem(IDC_ATLCODE_EDIT)->SetFocus();
 			return;
@@ -370,7 +373,7 @@ void CSubConPack::OnEnChangeMycodeEdit()
 		try
 		{
 			theApp.m_pCon->Execute((_bstr_t)sql,NULL,adCmdText);
-			bnum++;
+
 		} catch(_com_error e)
 		{
 			//e.ErrorMessage();
@@ -402,12 +405,12 @@ void CSubConPack::OnEnChangeMycodeEdit()
 		GetDlgItem(IDC_ATLCODE_EDIT)->SetFocus();
 
 		int tsize = CString2Int(TraySize);
-		if ((bnum+1)%tsize == 0)
+		if (bnum%tsize == 0)
 		{
 			tray = tray + 1;
 		}
 
-		if (bnum-1 == CString2Int(m_Qty))
+		if (bnum == CString2Int(m_Qty))
 		{
 			AfxMessageBox("");
 			AfxMessageBox("扫描完毕！请打包！");
@@ -415,14 +418,12 @@ void CSubConPack::OnEnChangeMycodeEdit()
 			CString model;
 			m_Model.GetLBText(m_Model.GetCurSel(), model);
 
-			CString line;
-			m_SGMLine.GetLBText(m_SGMLine.GetCurSel(), line);
-
 			CString sql = "insert into bSubCon(ProductModel,MarkBox,MYLine,MYQA) \
-						  values('"+model+"','"+m_MarkBox+"','"+line+"','"+m_SGMQA+"')";
+						  values('"+model+"','"+m_MarkBox+"','"+m_SGMLine+"','"+m_SGMQA+"')";
 
 			theApp.m_pCon->Execute((_bstr_t)sql,NULL,adCmdText);
 
+			bnum++;
 			m_MYCode =  "";
 			UpdateData(false);
 			return;
@@ -446,8 +447,8 @@ void CSubConPack::OnBnClickedPackButton()
 		bnum = 1;   // 计数回到1
 		tray = 1;
 		m_MarkBox = "";
-		/*m_ATLCode = "";
-		m_MYCode = "";*/
+		//m_ATLCode = "";
+		//m_MYCode = "";
 		m_BCMList.DeleteAllItems();
 		UpdateData(false);
 		GetDlgItem(IDC_PACK_EDIT)->SetFocus();

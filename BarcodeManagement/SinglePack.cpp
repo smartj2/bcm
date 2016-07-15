@@ -24,6 +24,7 @@ CSinglePack::CSinglePack(CWnd* pParent /*=NULL*/)
 	, m_Remark(_T(""))
 	, m_ATLCode(_T(""))
 	, TraySize(_T(""))
+	, m_SGMLine(_T(""))
 {
 
 }
@@ -40,11 +41,11 @@ void CSinglePack::DoDataExchange(CDataExchange* pDX)
 	DDX_Text(pDX, IDC_SGMQA_EDIT, m_SGMQA);
 	DDX_Text(pDX, IDC_REMARK_EDIT, m_Remark);
 	DDX_Text(pDX, IDC_ATLCODE_EDIT, m_ATLCode);
+	DDX_Text(pDX, IDC_SGMLINE_EDIT, m_SGMLine);
 	DDX_Control(pDX, IDC_MODEL_COMBO, m_Model);
 	DDX_Control(pDX, IDC_MI_COMBO, m_MI);
 	DDX_Control(pDX, IDC_MATERAL_COMBO, m_Material);
 	DDX_Control(pDX, IDC_ATLLEN_COMBO, m_ATLLen);
-	DDX_Control(pDX, IDC_SGMLINE_COMBO, m_SGMLine);
 	DDX_Control(pDX, IDC_ATLWEEK_COMBO, m_ATLWeek);
 	DDX_Control(pDX, IDC_BCM_LIST, m_BCMList);
 }
@@ -98,10 +99,10 @@ BOOL CSinglePack::OnInitDialog()
 
 	//m_ATLLen.AddString("12");
 
-	m_SGMLine.AddString("A");
-	m_SGMLine.AddString("B");
-	m_SGMLine.AddString("C");
-	m_SGMLine.AddString("D");
+	//m_SGMLine.AddString("A");
+	//m_SGMLine.AddString("B");
+	//m_SGMLine.AddString("C");
+	//m_SGMLine.AddString("D");
 
 	//m_Qty="540";
 
@@ -237,11 +238,7 @@ void CSinglePack::OnEnChangeAtlcodeEdit()
 		try
 		{
 			theApp.m_pCon->Execute((_bstr_t)sql,NULL,adCmdText);
-			bnum++;
 
-			GetDlgItem(IDC_ATLCODE_EDIT)->SetFocus();
-			m_ATLCode = "";
-			UpdateData(false);
 		} catch(_com_error e)
 		{
 			//e.ErrorMessage();
@@ -257,21 +254,27 @@ void CSinglePack::OnEnChangeAtlcodeEdit()
 
 			UpdateData(false);
 			GetDlgItem(IDC_ATLCODE_EDIT)->SetFocus();
+			return;
 		}
 
 		int tsize = CString2Int(TraySize);
-		if ((bnum+1)%tsize == 0)
+		if (bnum%tsize == 0)
 		{
 			tray = tray + 1;
 		}
 
-		if (bnum-1 == CString2Int(m_Qty))
+		if (bnum == CString2Int(m_Qty))
 		{
 			AfxMessageBox("");
 			AfxMessageBox("扫描完毕！请打包！");
 
 			UpdateData(false);
 		}
+
+		bnum++;
+		m_ATLCode = "";
+		GetDlgItem(IDC_ATLCODE_EDIT)->SetFocus();
+		UpdateData(false);
 	}
 }
 
@@ -293,14 +296,12 @@ void CSinglePack::OnBnClickedPackButton()
 		CString model;
 		m_Model.GetLBText(m_Model.GetCurSel(), model);
 
-		CString line;
-		m_SGMLine.GetLBText(m_SGMLine.GetCurSel(), line);
-
 		CString sql = "insert into bSubCon(ProductModel,MarkBox,MYLine,MYQA) \
-			values('"+model+"','"+m_MarkBox+"','"+line+"','"+m_SGMQA+"')";
+					  values('"+model+"','"+m_MarkBox+"','"+m_SGMLine+"','"+m_SGMQA+"')";
 		try
 		{
 			theApp.m_pCon->Execute((_bstr_t)sql,NULL,adCmdText);
+
 		} catch(_com_error e)
 		{
 			AfxMessageBox(e.Description());
@@ -309,6 +310,7 @@ void CSinglePack::OnBnClickedPackButton()
 		bnum = 1;   // 计数回到1
 		tray = 1;
 		m_MarkBox = "";
+		m_ATLCode = "";
 		m_BCMList.DeleteAllItems();
 		GetDlgItem(IDC_PACK_EDIT)->SetFocus();
 		UpdateData(false);

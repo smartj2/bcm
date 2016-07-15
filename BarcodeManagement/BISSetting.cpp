@@ -107,8 +107,8 @@ void CBISSetting::OnBnClickedAddButton()
 	}
 
 	CString sql = "insert into bBISInfo(Supplier,ProductModel,ProductMI, \
-						   BarcodeLen,Quantity,Material,TraySize) values('"+m_Supplier+"','"+m_Model+"', \
-						   '"+m_MI+"','"+m_ATLLen+"','"+m_Qty+"','"+m_Material+"','"+m_Tray+"')";
+		BarcodeLen,Quantity,Material,TraySize) values('"+m_Supplier+"','"+m_Model+"', \
+		'"+m_MI+"','"+m_ATLLen+"','"+m_Qty+"','"+m_Material+"','"+m_Tray+"')";
 
 	theApp.m_pCon->Execute((_bstr_t)sql,NULL,adCmdText);
 	m_BISList.DeleteAllItems();
@@ -154,8 +154,8 @@ void CBISSetting::OnBnClickedModButton()
 	}
 
 	CString sql = "update bBISInfo set Supplier='"+m_Supplier+"', ProductModel='"+m_Model+"', \
-						   BarcodeLen='"+m_ATLLen+"', Quantity='"+m_Qty+"', Material='"+m_Material+"', \
-						   TraySize='"+m_Tray+"' where ProductModel='"+m_Model+"'";
+		BarcodeLen='"+m_ATLLen+"', Quantity='"+m_Qty+"', Material='"+m_Material+"', \
+		TraySize='"+m_Tray+"' where ProductModel='"+m_Model+"'";
 
 	theApp.m_pCon->Execute((_bstr_t)sql,NULL,adCmdText);
 	m_BISList.DeleteAllItems();

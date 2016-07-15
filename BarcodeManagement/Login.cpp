@@ -77,7 +77,7 @@ BOOL CLogin::PreTranslateMessage(MSG* pMsg)
 				{
 					theApp.name = m_UserName;
 					theApp.pwd  = m_PassWord;
-					CDialog::OnOK();
+					CDialogEx::OnOK();
 				}
 				else
 				{

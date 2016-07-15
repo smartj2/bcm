@@ -142,7 +142,6 @@
   </ItemGroup>
   <ItemGroup>
     <Image Include="res\BarcodeManagement.ico" />
-    <Image Include="res\bitmap2.bmp" />
     <Image Include="res\login.bmp" />
     <Image Include="res\main.bmp" />
   </ItemGroup>
