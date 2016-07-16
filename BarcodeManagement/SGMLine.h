@@ -32,6 +32,7 @@ public:
 
 	afx_msg void OnBnClickedAddButton();
 	afx_msg void OnBnClickedModButton();
+	afx_msg void OnBnClickedDeleteButton();
 	afx_msg void OnBnClickedCancelButton();
 	afx_msg void OnNMDblclkSgmList(NMHDR *pNMHDR, LRESULT *pResult);
 };

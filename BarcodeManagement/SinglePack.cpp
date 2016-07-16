@@ -25,6 +25,7 @@ CSinglePack::CSinglePack(CWnd* pParent /*=NULL*/)
 	, m_ATLCode(_T(""))
 	, TraySize(_T(""))
 	, m_SGMLine(_T(""))
+	, m_Current(_T("0"))
 {
 
 }
@@ -42,6 +43,7 @@ void CSinglePack::DoDataExchange(CDataExchange* pDX)
 	DDX_Text(pDX, IDC_REMARK_EDIT, m_Remark);
 	DDX_Text(pDX, IDC_ATLCODE_EDIT, m_ATLCode);
 	DDX_Text(pDX, IDC_SGMLINE_EDIT, m_SGMLine);
+	DDX_Text(pDX, IDC_CURRENT_EDIT, m_Current);
 	DDX_Control(pDX, IDC_MODEL_COMBO, m_Model);
 	DDX_Control(pDX, IDC_MI_COMBO, m_MI);
 	DDX_Control(pDX, IDC_MATERAL_COMBO, m_Material);
@@ -271,6 +273,7 @@ void CSinglePack::OnEnChangeAtlcodeEdit()
 			UpdateData(false);
 		}
 
+		m_Current = Int2CString(bnum);
 		bnum++;
 		m_ATLCode = "";
 		GetDlgItem(IDC_ATLCODE_EDIT)->SetFocus();
@@ -311,6 +314,7 @@ void CSinglePack::OnBnClickedPackButton()
 		tray = 1;
 		m_MarkBox = "";
 		m_ATLCode = "";
+		m_Current   = "";
 		m_BCMList.DeleteAllItems();
 		GetDlgItem(IDC_PACK_EDIT)->SetFocus();
 		UpdateData(false);

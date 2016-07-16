@@ -26,6 +26,7 @@ CSubConPack::CSubConPack(CWnd* pParent /*=NULL*/)
 	, m_SGMQA(_T(""))
 	, m_Remark(_T(""))
 	, m_SGMLine(_T(""))
+	, m_Current(_T("0"))
 {
 
 }
@@ -44,6 +45,7 @@ void CSubConPack::DoDataExchange(CDataExchange* pDX)
 	DDX_Text(pDX, IDC_SGMQA_EDIT, m_SGMQA);
 	DDX_Text(pDX, IDC_SGMLINE_EDIT, m_SGMLine);
 	DDX_Text(pDX, IDC_REMARK_EDIT, m_Remark);
+	DDX_Text(pDX, IDC_CURRENT_EDIT, m_Current);
 	DDX_Control(pDX, IDC_MODEL_COMBO, m_Model);
 	DDX_Control(pDX, IDC_MI_COMBO, m_MI);
 	DDX_Control(pDX, IDC_MATERIAL_COMBO, m_Material);
@@ -414,20 +416,15 @@ void CSubConPack::OnEnChangeMycodeEdit()
 		{
 			AfxMessageBox("");
 			AfxMessageBox("扫描完毕！请打包！");
-			//将装箱信息存入数据库
-			CString model;
-			m_Model.GetLBText(m_Model.GetCurSel(), model);
-
-			CString sql = "insert into bSubCon(ProductModel,MarkBox,MYLine,MYQA) \
-						  values('"+model+"','"+m_MarkBox+"','"+m_SGMLine+"','"+m_SGMQA+"')";
-
-			theApp.m_pCon->Execute((_bstr_t)sql,NULL,adCmdText);
-
-			bnum++;
-			m_MYCode =  "";
+			
 			UpdateData(false);
-			return;
 		}
+
+		m_Current = Int2CString(bnum);
+		bnum++;
+		m_MYCode =  "";
+		GetDlgItem(IDC_ATLCODE_EDIT)->SetFocus();
+		UpdateData(false);
 	}
 }
 
@@ -444,9 +441,19 @@ void CSubConPack::OnBnClickedPackButton()
 	else if (bnum-1 == CString2Int(m_Qty))
 	{
 		AfxMessageBox("打包成功！");
+		//将装箱信息存入数据库
+		CString model;
+		m_Model.GetLBText(m_Model.GetCurSel(), model);
+
+		CString sql = "insert into bSubCon(ProductModel,MarkBox,MYLine,MYQA) \
+						values('"+model+"','"+m_MarkBox+"','"+m_SGMLine+"','"+m_SGMQA+"')";
+
+		theApp.m_pCon->Execute((_bstr_t)sql,NULL,adCmdText);
+
 		bnum = 1;   // 计数回到1
 		tray = 1;
 		m_MarkBox = "";
+		m_Current   = "";
 		//m_ATLCode = "";
 		//m_MYCode = "";
 		m_BCMList.DeleteAllItems();

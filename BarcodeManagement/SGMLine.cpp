@@ -44,6 +44,7 @@ BEGIN_MESSAGE_MAP(CSGMLine, CDialogEx)
 	ON_BN_CLICKED(IDC_MOD_BUTTON, &CSGMLine::OnBnClickedModButton)
 	ON_BN_CLICKED(IDC_CANCEL_BUTTON, &CSGMLine::OnBnClickedCancelButton)
 	ON_NOTIFY(NM_DBLCLK, IDC_SGM_LIST, &CSGMLine::OnNMDblclkSgmList)
+	ON_BN_CLICKED(IDC_DELETE_BUTTON, &CSGMLine::OnBnClickedDeleteButton)
 END_MESSAGE_MAP()
 
 
@@ -181,6 +182,38 @@ void CSGMLine::OnBnClickedModButton()
 }
 
 
+void CSGMLine::OnBnClickedDeleteButton()
+{
+	UpdateData(true);
+
+	CString sql="delete from bSGMInfo where ProductModel='"+m_Model+"'";
+	
+	try
+	{
+		theApp.m_pCon->Execute((_bstr_t)sql,NULL,adCmdText);
+	} catch(_com_error e)
+	{
+		AfxMessageBox(e.Description());
+	}
+
+	m_SGMList.DeleteAllItems();
+	m_pRs = theApp.m_pCon->Execute((_bstr_t)("select * from bSGMInfo"),NULL,adCmdText);
+	int i = 0;
+	while(!m_pRs->adoEOF)
+	{
+		m_SGMList.InsertItem(i,"");
+		m_SGMList.SetItemText(i,0,(char*)(_bstr_t)m_pRs->GetCollect("ProductModel"));
+		m_SGMList.SetItemText(i,1,(char*)(_bstr_t)m_pRs->GetCollect("BatteryMI"));
+		m_SGMList.SetItemText(i,2,(char*)(_bstr_t)m_pRs->GetCollect("ProduceYear"));
+		m_SGMList.SetItemText(i,3,(char*)(_bstr_t)m_pRs->GetCollect("Capacity"));
+		m_SGMList.SetItemText(i,4,(char*)(_bstr_t)m_pRs->GetCollect("MYLen"));
+		i++;
+		m_pRs->MoveNext();
+	}
+	UpdateData(false);
+}
+
+
 void CSGMLine::OnBnClickedCancelButton()
 {
 	CDialogEx::OnCancel();
@@ -203,3 +236,4 @@ void CSGMLine::OnNMDblclkSgmList(NMHDR *pNMHDR, LRESULT *pResult)
 
 	*pResult = 0;
 }
+

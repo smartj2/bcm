@@ -10,8 +10,9 @@
 #include "BISSetting.h"
 #include "SGMLine.h"
 #include "SinglePack.h"
-#include "CartonQuery.h"
 #include "SubConPack.h"
+#include "CartonQuery.h"
+#include "ClearData.h"
 #include "AlertBox.h"
 
 #ifdef _DEBUG
@@ -75,6 +76,7 @@ BEGIN_MESSAGE_MAP(CBarcodeManagementDlg, CDialogEx)
 	ON_COMMAND(ID_PACK_MENU, &CBarcodeManagementDlg::OnCartonPacking)
 	ON_COMMAND(ID_INFO_MENU, &CBarcodeManagementDlg::OnCartonQuery)
 	ON_COMMAND(IDD_ABOUTBOX, &CBarcodeManagementDlg::OnAboutbox)
+	ON_COMMAND(ID_CLEAR_MENU, &CBarcodeManagementDlg::OnClearMenu)
 END_MESSAGE_MAP()
 
 
@@ -218,6 +220,13 @@ void CBarcodeManagementDlg::OnCartonPacking()
 void CBarcodeManagementDlg::OnCartonQuery()
 {
 	CCartonQuery dlg;
+	dlg.DoModal();
+}
+
+
+void CBarcodeManagementDlg::OnClearMenu()
+{
+	CClearData dlg;
 	dlg.DoModal();
 }
 

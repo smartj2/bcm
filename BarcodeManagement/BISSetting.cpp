@@ -49,6 +49,7 @@ BEGIN_MESSAGE_MAP(CBISSetting, CDialogEx)
 	ON_BN_CLICKED(IDC_MOD_BUTTON, &CBISSetting::OnBnClickedModButton)
 	ON_BN_CLICKED(IDC_EXIT_BUTTON, &CBISSetting::OnBnClickedExitButton)
 	ON_NOTIFY(NM_DBLCLK, IDC_BIS_LIST, &CBISSetting::OnNMDblclkBisList)
+	ON_BN_CLICKED(IDC_DELETE_BUTTON, &CBISSetting::OnBnClickedDeleteButton)
 END_MESSAGE_MAP()
 
 
@@ -188,6 +189,40 @@ void CBISSetting::OnBnClickedModButton()
 }
 
 
+void CBISSetting::OnBnClickedDeleteButton()
+{
+	UpdateData(true);
+
+	CString sql="delete from bBISInfo where ProductModel='"+m_Model+"'";
+	
+	try
+	{
+		theApp.m_pCon->Execute((_bstr_t)sql,NULL,adCmdText);
+	} catch(_com_error e)
+	{
+		AfxMessageBox(e.Description());
+	}
+
+	m_BISList.DeleteAllItems();
+	m_pRs = theApp.m_pCon->Execute((_bstr_t)("select * from bBISInfo"),NULL,adCmdText);
+	int i = 0;
+	while(!m_pRs->adoEOF)
+	{
+		m_BISList.InsertItem(i,"");
+		m_BISList.SetItemText(i,0,(char*)(_bstr_t)m_pRs->GetCollect("Supplier"));
+		m_BISList.SetItemText(i,1,(char*)(_bstr_t)m_pRs->GetCollect("ProductModel"));
+		m_BISList.SetItemText(i,2,(char*)(_bstr_t)m_pRs->GetCollect("ProductMI"));
+		m_BISList.SetItemText(i,3,(char*)(_bstr_t)m_pRs->GetCollect("BarcodeLen"));
+		m_BISList.SetItemText(i,4,(char*)(_bstr_t)m_pRs->GetCollect("Quantity"));
+		m_BISList.SetItemText(i,5,(char*)(_bstr_t)m_pRs->GetCollect("TraySize"));
+		m_BISList.SetItemText(i,6,(char*)(_bstr_t)m_pRs->GetCollect("Material"));
+		i++;
+		m_pRs->MoveNext();
+	}
+	UpdateData(false);
+}
+
+
 void CBISSetting::OnBnClickedExitButton()
 {
 	CDialogEx::OnCancel();
@@ -212,3 +247,4 @@ void CBISSetting::OnNMDblclkBisList(NMHDR *pNMHDR, LRESULT *pResult)
 
 	*pResult = 0;
 }
+

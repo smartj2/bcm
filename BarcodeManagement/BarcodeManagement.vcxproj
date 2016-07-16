@@ -111,6 +111,7 @@
     <ClInclude Include="BarcodeManagementDlg.h" />
     <ClInclude Include="BISSetting.h" />
     <ClInclude Include="CartonQuery.h" />
+    <ClInclude Include="ClearData.h" />
     <ClInclude Include="Login.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="SGMLine.h" />
@@ -125,6 +126,7 @@
     <ClCompile Include="BarcodeManagementDlg.cpp" />
     <ClCompile Include="BISSetting.cpp" />
     <ClCompile Include="CartonQuery.cpp" />
+    <ClCompile Include="ClearData.cpp" />
     <ClCompile Include="Login.cpp" />
     <ClCompile Include="SGMLine.cpp" />
     <ClCompile Include="SinglePack.cpp" />

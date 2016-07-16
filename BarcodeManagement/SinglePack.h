@@ -33,6 +33,7 @@ public:
 	CString m_Remark;
 	CString m_ATLCode;
 	CString m_SGMLine;
+	CString m_Current;
 
 	CComboBox m_Model;
 	CComboBox m_MI;

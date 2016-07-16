@@ -36,6 +36,7 @@ public:
 	CString m_SGMQA;
 	CString m_SGMLine;
 	CString m_Remark;
+	CString m_Current;
 
 	CComboBox m_Model;
 	CComboBox m_MI;
