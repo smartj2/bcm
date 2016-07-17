@@ -25,6 +25,8 @@ protected:
 
 	DECLARE_MESSAGE_MAP()
 public:
+	int bnum;
+	int tray;
 	virtual BOOL OnInitDialog();
 	virtual BOOL PreTranslateMessage(MSG* pMsg);
 	CString m_MarkBox;

@@ -25,6 +25,8 @@ protected:
 
 	DECLARE_MESSAGE_MAP()
 public:
+	int bnum;
+	int tray;
 	afx_msg void OnLbnSelchangeList1();
 	virtual BOOL OnInitDialog();
 	virtual BOOL PreTranslateMessage(MSG* pMsg);

@@ -11,8 +11,6 @@
 
 // CSinglePack 对话框
 extern CBarcodeManagementApp theApp;
-static int bnum = 1;
-static int tray  = 1;
 
 IMPLEMENT_DYNAMIC(CSinglePack, CDialogEx)
 
@@ -28,6 +26,8 @@ CSinglePack::CSinglePack(CWnd* pParent /*=NULL*/)
 	, m_Current(_T("0"))
 {
 
+	bnum = 1;
+	tray = 1;
 }
 
 CSinglePack::~CSinglePack()
@@ -123,8 +123,8 @@ BOOL CSinglePack::OnInitDialog()
 		|LVS_EX_GRIDLINES);
 
 	// 设置表头
-	m_BCMList.InsertColumn(0, "序号", LVCFMT_CENTER, 50, 0);
-	m_BCMList.InsertColumn(1, "托盘号", LVCFMT_CENTER, 50, 1);
+	m_BCMList.InsertColumn(0, "托盘号", LVCFMT_CENTER, 50, 0);
+	m_BCMList.InsertColumn(1, "电池序号", LVCFMT_CENTER, 50, 1);
 	m_BCMList.InsertColumn(2, "外箱条码", LVCFMT_CENTER, 100, 2);
 	m_BCMList.InsertColumn(3, "电芯型号", LVCFMT_CENTER, 120, 3);
 	m_BCMList.InsertColumn(4, "电芯条码", LVCFMT_CENTER, 120, 4);
@@ -212,6 +212,8 @@ void CSinglePack::OnEnChangeAtlcodeEdit()
 	CString atlLen;
 	m_ATLLen.GetLBText(m_ATLLen.GetCurSel(), atlLen);
 
+	int tsize = CString2Int(TraySize);
+
 	if (m_ATLCode.GetLength() == CString2Int(atlLen))
 	{
 		if (!CheckCoreCode(m_ATLCode))
@@ -223,9 +225,15 @@ void CSinglePack::OnEnChangeAtlcodeEdit()
 			GetDlgItem(IDC_ATLCODE_EDIT)->SetFocus();
 			return;
 		}
+
+		int count = bnum%tsize;
+		if (count == 0)
+		{
+			count = CString2Int(TraySize);
+		}
 		m_BCMList.InsertItem(bnum-1,"");
-		m_BCMList.SetItemText(bnum-1,0,Int2CString(bnum));
-		m_BCMList.SetItemText(bnum-1,1,Int2CString(tray));
+		m_BCMList.SetItemText(bnum-1,0,Int2CString(tray));
+		m_BCMList.SetItemText(bnum-1,1,Int2CString(count));
 		m_BCMList.SetItemText(bnum-1,2,m_MarkBox);
 		m_BCMList.SetItemText(bnum-1,3,model);
 		m_BCMList.SetItemText(bnum-1,4,m_ATLCode);
@@ -259,7 +267,12 @@ void CSinglePack::OnEnChangeAtlcodeEdit()
 			return;
 		}
 
-		int tsize = CString2Int(TraySize);
+		if (count == CString2Int(TraySize) && tray < CString2Int(m_Qty)/CString2Int(TraySize))
+		{
+			AfxMessageBox("");
+			AfxMessageBox("已扫完一盘，请换下一盘！");
+		}
+
 		if (bnum%tsize == 0)
 		{
 			tray = tray + 1;

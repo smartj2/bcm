@@ -12,8 +12,6 @@
 
 // CSubConPack ¶Ô»°¿ò
 extern CBarcodeManagementApp theApp;
-static int bnum = 1;
-static int tray  = 1;
 
 IMPLEMENT_DYNAMIC(CSubConPack, CDialogEx)
 
@@ -29,6 +27,8 @@ CSubConPack::CSubConPack(CWnd* pParent /*=NULL*/)
 	, m_Current(_T("0"))
 {
 
+	bnum = 1;
+	tray = 1;
 }
 
 CSubConPack::~CSubConPack()
@@ -158,8 +158,8 @@ BOOL CSubConPack::OnInitDialog()
 		|LVS_EX_GRIDLINES);
 
 	// ÉèÖÃ±íÍ·
-	m_BCMList.InsertColumn(0, "ÐòºÅ", LVCFMT_CENTER, 50, 0);
-	m_BCMList.InsertColumn(1, "ÍÐÅÌºÅ", LVCFMT_CENTER, 50, 1);
+	m_BCMList.InsertColumn(0, "ÍÐÅÌºÅ", LVCFMT_CENTER, 50, 0);
+	m_BCMList.InsertColumn(1, "µç³ØÐòºÅ", LVCFMT_CENTER, 50, 1);
 	m_BCMList.InsertColumn(2, "ÍâÏäÌõÂë", LVCFMT_CENTER, 100, 2);
 	m_BCMList.InsertColumn(3, "µçÐ¾ÐÍºÅ", LVCFMT_CENTER, 120, 3);
 	m_BCMList.InsertColumn(4, "µçÐ¾ÌõÂë", LVCFMT_CENTER, 120, 4);
@@ -289,6 +289,8 @@ void CSubConPack::OnEnChangeAtlcodeEdit()
 	CString atlLen;
 	m_ATLLen.GetLBText(m_ATLLen.GetCurSel(), atlLen);
 
+	int tsize = CString2Int(TraySize);
+
 	if (m_ATLCode.GetLength() == CString2Int(atlLen))
 	{
 		if (!CheckCoreCode(m_ATLCode))
@@ -301,9 +303,16 @@ void CSubConPack::OnEnChangeAtlcodeEdit()
 			GetDlgItem(IDC_ATLCODE_EDIT)->SetFocus();
 			return;
 		}
+
+		int count = bnum%tsize;
+		if (count == 0)
+		{
+			count = CString2Int(TraySize);
+		}
+
 		m_BCMList.InsertItem(bnum-1,"");
-		m_BCMList.SetItemText(bnum-1,0,Int2CString(bnum));
-		m_BCMList.SetItemText(bnum-1,1,Int2CString(tray));
+		m_BCMList.SetItemText(bnum-1,0,Int2CString(tray));
+		m_BCMList.SetItemText(bnum-1,1,Int2CString(count));
 		m_BCMList.SetItemText(bnum-1,2,m_MarkBox);
 		m_BCMList.SetItemText(bnum-1,3,model);
 		m_BCMList.SetItemText(bnum-1,4,m_ATLCode);
@@ -342,6 +351,19 @@ void CSubConPack::OnEnChangeMycodeEdit()
 
 	CString myLen;
 	m_MYLen.GetLBText(m_MYLen.GetCurSel(), myLen);
+
+	if (m_MYCode.GetLength() == m_ATLCode.GetLength() && m_MYCode == m_ATLCode)
+	{
+		AfxMessageBox("");
+		AfxMessageBox("ÖØ¸´É¨µçÐ¾Âë£¬Çë»»ÁíÒ»±ß£¡");
+
+		m_MYCode = "";
+
+		UpdateData(false);
+
+		GetDlgItem(IDC_MYCODE_EDIT)->SetFocus();
+		return;
+	}
 
 	if (m_MYCode.GetLength() == CString2Int(myLen))
 	{
@@ -400,6 +422,12 @@ void CSubConPack::OnEnChangeMycodeEdit()
 		m_PackProgress.SetRange(1, CString2Int(m_Qty));
 		m_PackProgress.SetStep(1);
 		m_PackProgress.StepIt();
+
+		if (bnum%CString2Int(TraySize) == 0 && tray < CString2Int(m_Qty)/CString2Int(TraySize))
+		{
+			AfxMessageBox("");
+			AfxMessageBox("ÒÑÉ¨ÍêÒ»ÅÌ£¬Çë»»ÏÂÒ»ÅÌ£¡");
+		}
 
 		m_ATLCode =  "";
 		UpdateData(false);
