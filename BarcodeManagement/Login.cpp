@@ -44,10 +44,13 @@ END_MESSAGE_MAP()
 
 BOOL CLogin::PreTranslateMessage(MSG* pMsg)
 {
-	// 取消键盘输入回车事件
-	if (pMsg->message == WM_KEYDOWN && pMsg->wParam == 13)
+	// 屏蔽键盘输入回车事件
+	if (pMsg->message == WM_KEYDOWN)
 	{
-		pMsg->wParam = 9;
+		if (pMsg->wParam == VK_RETURN)
+		{
+			return TRUE;
+		}
 	}
 
 	if (pMsg->message == WM_LBUTTONDOWN)
@@ -84,12 +87,13 @@ BOOL CLogin::PreTranslateMessage(MSG* pMsg)
 					AfxMessageBox("用户名和密码不正确!");
 					// m_UserName = "";
 					m_PassWord = "";
+					GetDlgItem(IDC_EDIT2)->SetFocus();
 					UpdateData(false);
 				}
 			} catch(_com_error e)
 			{
 				CString eMessage;
-				eMessage.Format("连接数据库错误信息：%s", e.ErrorMessage());
+				eMessage.Format("连接数据库错误信息：%s", e.Description());
 				AfxMessageBox(eMessage);
 			}
 		}

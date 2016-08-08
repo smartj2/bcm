@@ -33,6 +33,8 @@
 
 #import "msado15.dll" no_namespace rename("EOF","adoEOF")  // 引入数据库连接库
 
+//#define IniFile "./config.ini" // 数据库配置文件
+
 
 #ifdef _UNICODE
 #if defined _M_IX86

@@ -81,7 +81,7 @@ BOOL CSGMLine::OnInitDialog()
 		m_SGMList.InsertItem(i,"");
 		m_SGMList.SetItemText(i,0,(char*)(_bstr_t)m_pRs->GetCollect("ProductModel"));
 		m_SGMList.SetItemText(i,1,(char*)(_bstr_t)m_pRs->GetCollect("BatteryMI"));
-		m_SGMList.SetItemText(i,2,(char*)(_bstr_t)m_pRs->GetCollect("ProduceYear"));
+		m_SGMList.SetItemText(i,2,(char*)(_bstr_t)m_pRs->GetCollect("PackYear"));
 		m_SGMList.SetItemText(i,3,(char*)(_bstr_t)m_pRs->GetCollect("Capacity"));
 		m_SGMList.SetItemText(i,4,(char*)(_bstr_t)m_pRs->GetCollect("MYLen"));
 		i++;
@@ -96,7 +96,6 @@ BOOL CSGMLine::OnInitDialog()
 
 void CSGMLine::OnBnClickedAddButton()
 {
-	// TODO: 在此添加控件通知处理程序代码
 	UpdateData(true);
 	if (m_Model.IsEmpty() || m_BMI.IsEmpty() || m_Year.IsEmpty() || m_Capacity.IsEmpty() || m_MYLen.IsEmpty())
 	{
@@ -104,7 +103,7 @@ void CSGMLine::OnBnClickedAddButton()
 		return;
 	}
 
-	CString sql = "insert into bSGMInfo(ProductModel,BatteryMI,ProduceYear, \
+	CString sql = "insert into bSGMInfo(ProductModel,BatteryMI,PackYear, \
 		Capacity, MYLen) values('"+m_Model+"','"+m_BMI+"','"+m_Year+"','"+m_Capacity+"','"+m_MYLen+"')";
 
 	theApp.m_pCon->Execute((_bstr_t)sql,NULL,adCmdText);
@@ -117,7 +116,7 @@ void CSGMLine::OnBnClickedAddButton()
 		m_SGMList.InsertItem(i,"");
 		m_SGMList.SetItemText(i,0,(char*)(_bstr_t)m_pRs->GetCollect("ProductModel"));
 		m_SGMList.SetItemText(i,1,(char*)(_bstr_t)m_pRs->GetCollect("BatteryMI"));
-		m_SGMList.SetItemText(i,2,(char*)(_bstr_t)m_pRs->GetCollect("ProduceYear"));
+		m_SGMList.SetItemText(i,2,(char*)(_bstr_t)m_pRs->GetCollect("PackYear"));
 		m_SGMList.SetItemText(i,3,(char*)(_bstr_t)m_pRs->GetCollect("Capacity"));
 		m_SGMList.SetItemText(i,4,(char*)(_bstr_t)m_pRs->GetCollect("MYLen"));
 		i++;
@@ -145,7 +144,7 @@ void CSGMLine::OnBnClickedModButton()
 	}
 
 	CString sql = "update bSGMInfo set ProductModel='"+m_Model+"', BatteryMI='"+m_BMI+"', \
-		ProduceYear='"+m_Year+"', Capacity='"+m_Capacity+"', MYLen='"+m_MYLen+"' where ProductModel='"+m_Model+"'";
+		PackYear='"+m_Year+"', Capacity='"+m_Capacity+"', MYLen='"+m_MYLen+"' where ProductModel='"+m_Model+"'";
 
 	try
 	{
@@ -165,7 +164,7 @@ void CSGMLine::OnBnClickedModButton()
 		m_SGMList.InsertItem(i,"");
 		m_SGMList.SetItemText(i,0,(char*)(_bstr_t)m_pRs->GetCollect("ProductModel"));
 		m_SGMList.SetItemText(i,1,(char*)(_bstr_t)m_pRs->GetCollect("BatteryMI"));
-		m_SGMList.SetItemText(i,2,(char*)(_bstr_t)m_pRs->GetCollect("ProduceYear"));
+		m_SGMList.SetItemText(i,2,(char*)(_bstr_t)m_pRs->GetCollect("PackYear"));
 		m_SGMList.SetItemText(i,3,(char*)(_bstr_t)m_pRs->GetCollect("Capacity"));
 		m_SGMList.SetItemText(i,4,(char*)(_bstr_t)m_pRs->GetCollect("MYLen"));
 		i++;
@@ -204,7 +203,7 @@ void CSGMLine::OnBnClickedDeleteButton()
 		m_SGMList.InsertItem(i,"");
 		m_SGMList.SetItemText(i,0,(char*)(_bstr_t)m_pRs->GetCollect("ProductModel"));
 		m_SGMList.SetItemText(i,1,(char*)(_bstr_t)m_pRs->GetCollect("BatteryMI"));
-		m_SGMList.SetItemText(i,2,(char*)(_bstr_t)m_pRs->GetCollect("ProduceYear"));
+		m_SGMList.SetItemText(i,2,(char*)(_bstr_t)m_pRs->GetCollect("PackYear"));
 		m_SGMList.SetItemText(i,3,(char*)(_bstr_t)m_pRs->GetCollect("Capacity"));
 		m_SGMList.SetItemText(i,4,(char*)(_bstr_t)m_pRs->GetCollect("MYLen"));
 		i++;

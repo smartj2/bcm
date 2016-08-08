@@ -84,7 +84,7 @@ BOOL CCartonQuery::OnInitDialog()
 
 BOOL CCartonQuery::PreTranslateMessage(MSG* pMsg)
 {
-	// 取消键盘输入回车事件
+	// 屏蔽键盘输入回车事件
 	if (pMsg->message == WM_KEYDOWN)
 	{
 		if (pMsg->wParam == VK_RETURN)
@@ -99,36 +99,64 @@ BOOL CCartonQuery::PreTranslateMessage(MSG* pMsg)
 
 void CCartonQuery::OnBnClickedQueryButton()
 {
-	// TODO: 在此添加控件通知处理程序代码
 	UpdateData(true);
 	m_ResultList.DeleteAllItems();
+
+	CString sql1 = "select * from bSubCon where MarkBox='"+m_Query+"'";
+	try
+	{
+		m_pRs = theApp.m_pCon->Execute((_bstr_t)sql1,NULL,adCmdText);
+
+	} catch(_com_error e)
+	{
+		AfxMessageBox(e.Description());
+	}
+	CString isDoubleCode = (char*)(_bstr_t)m_pRs->GetCollect("IsDoubleCode");
 
 	CString type;
 	m_QueryType.GetLBText(m_QueryType.GetCurSel(), type);
 
-	CString sql;
-	if (type == "外箱条码")
+	CString sql2;
+	/*if (type == "外箱条码" && isDoubleCode == "1")
 	{
-		sql = "select b.MarkBox, b.ATLBarcode, b.MYBarcode, b.ScanTime, b.Remark, \
+		sql2 = "select s.MarkBox, s.ATLBarcode, s.ScanTime, s.Remark, \
+			sc.ProductModel, sc.MYLine, sc.MYQA from bSingleBarcode s, bSubCon sc where \
+			s.MarkBox = sc.MarkBox and s.MarkBox='"+m_Query+"'";
+	}
+	else if (type == "电芯条码" && isDoubleCode == "1")
+	{
+		sql2 = "select s.MarkBox, s.ATLBarcode, s.ScanTime, s.Remark, \
+			sc.ProductModel, sc.MYLine, sc.MYQA from bSingleBarcode s, bSubCon sc where \
+			s.MarkBox = sc.MarkBox and s.ATLBarcode='"+m_Query+"'";
+	}
+	else if (type == "电池条码" && isDoubleCode == "1")
+	{
+		sql2 = "select s.MarkBox, s.ATLBarcode, s.ScanTime, s.Remark, \
+			sc.ProductModel, sc.MYLine, sc.MYQA from bSingleBarcode s, bSubCon sc where \
+			s.MarkBox = sc.MarkBox and s.MYBarcode='"+m_Query+"'";
+	}*/
+	if (type == "外箱条码" && isDoubleCode == "2")
+	{
+		sql2 = "select b.MarkBox, b.ATLBarcode, b.MYBarcode, b.ScanTime, b.Remark, \
 			s.ProductModel, s.MYLine, s.MYQA from bDoubleBarcode b, bSubCon s where \
-			b.MarkBox = s.MarkBox and b.MarkBox='"+m_Query+"'";
+			b.MarkBox = s.MarkBox and s.MarkBox='"+m_Query+"'";
 	}
 	else if (type == "电芯条码")
 	{
-		sql = "select b.MarkBox, b.ATLBarcode, b.MYBarcode, b.ScanTime, b.Remark, \
+		sql2 = "select b.MarkBox, b.ATLBarcode, b.MYBarcode, b.ScanTime, b.Remark, \
 			s.ProductModel, s.MYLine, s.MYQA from bDoubleBarcode b, bSubCon s where \
 			b.MarkBox = s.MarkBox and b.ATLBarcode='"+m_Query+"'";
 	}
 	else if (type == "电池条码")
 	{
-		sql = "select b.MarkBox, b.ATLBarcode, b.MYBarcode, b.ScanTime, b.Remark, \
+		sql2 = "select b.MarkBox, b.ATLBarcode, b.MYBarcode, b.ScanTime, b.Remark, \
 			s.ProductModel, s.MYLine, s.MYQA from bDoubleBarcode b, bSubCon s where \
 			b.MarkBox = s.MarkBox and b.MYBarcode='"+m_Query+"'";
 	}
 
 	try
 	{
-		m_pRs = theApp.m_pCon->Execute((_bstr_t)sql,NULL,adCmdText);
+		m_pRs = theApp.m_pCon->Execute((_bstr_t)sql2,NULL,adCmdText);
 	}
 	catch(_com_error e)
 	{

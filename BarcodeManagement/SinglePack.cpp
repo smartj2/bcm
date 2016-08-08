@@ -77,17 +77,11 @@ BOOL CSinglePack::OnInitDialog()
 	if(m_pRs->GetRecordCount()==1)
 	{
 		m_Model.AddString((char*)(_bstr_t)m_pRs->GetCollect("ProductModel"));
-		//m_MI.AddString((char*)(_bstr_t)m_pRs->GetCollect("ProductMI"));
-		//m_Material.AddString((char*)(_bstr_t)m_pRs->GetCollect("Material"));
-		//m_ATLLen.AddString((char*)(_bstr_t)m_pRs->GetCollect("BarcodeLen"));
 		return TRUE;
 	}
 	while(!m_pRs->adoEOF)
 	{
 		m_Model.AddString((char*)(_bstr_t)m_pRs->GetCollect("ProductModel"));
-		//m_MI.AddString((char*)(_bstr_t)m_pRs->GetCollect("ProductMI"));
-		//m_Material.AddString((char*)(_bstr_t)m_pRs->GetCollect("Material"));
-		//m_ATLLen.AddString((char*)(_bstr_t)m_pRs->GetCollect("BarcodeLen"));
 		m_pRs->MoveNext();
 	}
 
@@ -95,26 +89,13 @@ BOOL CSinglePack::OnInitDialog()
 	while (week <= 52)
 	{
 		std::string strWeek = boost::str(boost::format("%02d") % week);
-		m_ATLWeek.AddString(String2CString(strWeek)); // 电芯周期
+		m_ATLWeek.AddString(String2CString(strWeek));   // 电芯周期
 		week = week + 1;
 	}
 
-	//m_ATLLen.AddString("12");
-
-	//m_SGMLine.AddString("A");
-	//m_SGMLine.AddString("B");
-	//m_SGMLine.AddString("C");
-	//m_SGMLine.AddString("D");
-
-	//m_Qty="540";
-
 	// 初始化默认选项
 	m_Model.SetCurSel(0);
-	//m_MI.SetCurSel(1);
-	//m_Material.SetCurSel(1);
-	//m_ATLLen.SetCurSel(0);
-	//m_SGMLine.SetCurSel(0);
-	m_ATLWeek.SetCurSel(21);
+	m_ATLWeek.SetCurSel(26);
 
 	m_BCMList.SetExtendedStyle(LVS_EX_FLATSB
 		|LVS_EX_FULLROWSELECT
@@ -139,6 +120,7 @@ BOOL CSinglePack::OnInitDialog()
 
 BOOL CSinglePack::PreTranslateMessage(MSG* pMsg)
 {
+	// 屏蔽键盘输入回车事件
 	if (pMsg->message == WM_KEYDOWN)
 	{
 		if (pMsg->wParam == VK_RETURN)
@@ -251,8 +233,6 @@ void CSinglePack::OnEnChangeAtlcodeEdit()
 
 		} catch(_com_error e)
 		{
-			//e.ErrorMessage();
-			//AfxMessageBox(e.Description());
 			AfxMessageBox("");
 			AfxMessageBox("该电池重码！！！");
 			m_ATLCode = "";
@@ -292,6 +272,8 @@ void CSinglePack::OnEnChangeAtlcodeEdit()
 		GetDlgItem(IDC_ATLCODE_EDIT)->SetFocus();
 		UpdateData(false);
 	}
+	// 实现CtrlList自动滚动
+	m_BCMList.EnsureVisible(m_BCMList.GetItemCount()-1, TRUE);
 }
 
 
@@ -312,8 +294,8 @@ void CSinglePack::OnBnClickedPackButton()
 		CString model;
 		m_Model.GetLBText(m_Model.GetCurSel(), model);
 
-		CString sql = "insert into bSubCon(ProductModel,MarkBox,MYLine,MYQA) \
-					  values('"+model+"','"+m_MarkBox+"','"+m_SGMLine+"','"+m_SGMQA+"')";
+		CString sql = "insert into bSubCon(ProductModel,MarkBox,MYLine,MYQA,IsDoubleCode) \
+					  values('"+model+"','"+m_MarkBox+"','"+m_SGMLine+"','"+m_SGMQA+"','1')";
 		try
 		{
 			theApp.m_pCon->Execute((_bstr_t)sql,NULL,adCmdText);
@@ -350,7 +332,22 @@ bool CSinglePack::CheckCoreCode(const CString& coreCode)
 	CString type;
 	m_MI.GetLBText(m_MI.GetCurSel(), type);  //L41表示代号
 
-	CString year = "6"; //6表示2016年
+	CString model;
+	m_Model.GetLBText(m_Model.GetCurSel(), model);
+
+	CString sql = "select * from bBISInfo where ProductModel='"+model+"'";
+	try
+	{
+		m_pRs = theApp.m_pCon->Execute((_bstr_t)sql,NULL,adCmdText);
+
+	} catch(_com_error e)
+	{
+		AfxMessageBox(e.Description());
+	}
+
+	CString year; //6表示2016年
+	year = (char*)(_bstr_t)m_pRs->GetCollect("ProduceYear");
+
 	CString week;	   //04表示第4个星期
 	m_ATLWeek.GetLBText(m_ATLWeek.GetCurSel(), week);
 
@@ -364,7 +361,8 @@ bool CSinglePack::CheckCoreCode(const CString& coreCode)
 	//string strDayInWeek = CString2String(dayInWeek);
 
 	//1.前三个字符串是一样的，后5位流水号
-	boost::regex reg(strType + strYear + strWeek + "[0-9A-Z]{6}");
+	//boost::regex reg(strType + strYear + strWeek + "[0-9A-Z]{6}");
+	boost::regex reg(strType + "[0-9A-Z]{9}");
 	return boost::regex_match(strCoreCode, reg);
 }
 

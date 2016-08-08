@@ -8,6 +8,7 @@
 
 
 // CClearData ¶Ô»°¿ò
+extern CBarcodeManagementApp theApp;
 
 IMPLEMENT_DYNAMIC(CClearData, CDialogEx)
 

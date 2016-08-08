@@ -55,12 +55,10 @@ END_MESSAGE_MAP()
 
 // CBISSetting 消息处理程序
 
-
 BOOL CBISSetting::OnInitDialog()
 {
 	CDialogEx::OnInitDialog();
 
-	// TODO:  在此添加额外的初始化
 	m_BISList.SetExtendedStyle(LVS_EX_FLATSB
 		|LVS_EX_FULLROWSELECT
 		|LVS_EX_HEADERDRAGDROP
@@ -98,7 +96,6 @@ BOOL CBISSetting::OnInitDialog()
 
 void CBISSetting::OnBnClickedAddButton()
 {
-	// TODO: 在此添加控件通知处理程序代码
 	UpdateData(true);
 	if (m_Supplier.IsEmpty() || m_Model.IsEmpty() || m_MI.IsEmpty() 
 		|| m_ATLLen.IsEmpty() || m_Qty.IsEmpty() || m_Material.IsEmpty())
@@ -143,9 +140,7 @@ void CBISSetting::OnBnClickedAddButton()
 
 void CBISSetting::OnBnClickedModButton()
 {
-	// TODO: 在此添加控件通知处理程序代码
 	UpdateData(true);
-	//GetDlgItem(IDC_ADD_BUTTON)->EnableWindow(FALSE);
 
 	if (m_Supplier.IsEmpty() || m_Model.IsEmpty() || m_MI.IsEmpty() 
 		|| m_ATLLen.IsEmpty() || m_Qty.IsEmpty() || m_Material.IsEmpty())
@@ -193,7 +188,7 @@ void CBISSetting::OnBnClickedDeleteButton()
 {
 	UpdateData(true);
 
-	CString sql="delete from bBISInfo where ProductModel='"+m_Model+"'";
+	CString sql = "delete from bBISInfo where ProductModel='"+m_Model+"'";
 	
 	try
 	{

@@ -51,7 +51,6 @@ public:
 	CListCtrl m_BCMList;
 	CProgressCtrl m_PackProgress;
 	
-	afx_msg void OnEnKillfocusPackEdit();
 	afx_msg void OnCbnSelchangeModelCombo();
 	afx_msg void OnEnChangeAtlcodeEdit();
 	afx_msg void OnEnChangeMycodeEdit();

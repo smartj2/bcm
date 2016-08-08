@@ -70,16 +70,19 @@ BOOL CBarcodeManagementApp::InitInstance()
 	// 例如修改为公司或组织名
 
 	::CoInitialize(NULL);
-	HRESULT hr;
 	try
 	{
-		hr = m_pCon.CreateInstance("ADODB.Connection");
+		m_pCon.CreateInstance(__uuidof(Connection));
+		//m_pCon.CreateInstance("ADODB.Recordset");
+	   _bstr_t strConnect="Provider=SQLOLEDB.1;Persist Security Info=False;User ID=bcm;Initial Catalog=bcm;Data Source=SRV03";
+	   m_pCon->Open(strConnect,"bcm","bcmadmin",adModeUnknown);
+		/*HRESULT hr = m_pCon.CreateInstance("ADODB.Connection");
 		if (SUCCEEDED(hr))
 		{
 			m_pCon->ConnectionTimeout = 3;
 			hr = m_pCon->Open("Provider=Microsoft.Jet.OLEDB.4.0;Data Source=../data/bcm.mdb","","",adModeUnknown);
 			//::MessageBox(NULL, _T(""), _T("连接成功"), NULL);
-		}
+		}*/
 	}
 	catch(_com_error e)
 	{
