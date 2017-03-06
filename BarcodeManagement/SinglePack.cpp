@@ -86,7 +86,7 @@ BOOL CSinglePack::OnInitDialog()
 	}
 
 	int week = 1;
-	while (week <= 52)
+	while (week <= 54)
 	{
 		std::string strWeek = boost::str(boost::format("%02d") % week);
 		m_ATLWeek.AddString(String2CString(strWeek));   // 电芯周期
@@ -95,7 +95,7 @@ BOOL CSinglePack::OnInitDialog()
 
 	// 初始化默认选项
 	m_Model.SetCurSel(0);
-	m_ATLWeek.SetCurSel(26);
+	m_ATLWeek.SetCurSel(29);
 
 	m_BCMList.SetExtendedStyle(LVS_EX_FLATSB
 		|LVS_EX_FULLROWSELECT
@@ -105,13 +105,13 @@ BOOL CSinglePack::OnInitDialog()
 
 	// 设置表头
 	m_BCMList.InsertColumn(0, "托盘号", LVCFMT_CENTER, 50, 0);
-	m_BCMList.InsertColumn(1, "电池序号", LVCFMT_CENTER, 50, 1);
+	m_BCMList.InsertColumn(1, "电池序号", LVCFMT_CENTER, 80, 1);
 	m_BCMList.InsertColumn(2, "外箱条码", LVCFMT_CENTER, 100, 2);
 	m_BCMList.InsertColumn(3, "电芯型号", LVCFMT_CENTER, 120, 3);
 	m_BCMList.InsertColumn(4, "电芯条码", LVCFMT_CENTER, 120, 4);
 	m_BCMList.InsertColumn(5, "品质检员", LVCFMT_CENTER, 100, 5);
 	m_BCMList.InsertColumn(6, "扫码时间", LVCFMT_CENTER, 120, 6);
-	m_BCMList.InsertColumn(7, "备注", LVCFMT_CENTER, 120, 7);
+	m_BCMList.InsertColumn(7, "备注", LVCFMT_CENTER, 100, 7);
 
 	return TRUE;  // return TRUE unless you set the focus to a control
 	// 异常: OCX 属性页应返回 FALSE

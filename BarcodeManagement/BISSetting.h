@@ -27,6 +27,7 @@ public:
 	CString m_Material;
 	CString m_MI;
 	CString m_Model;
+	CString m_ATLYear;
 	CString m_Qty;
 	CString m_Tray;
 	CString m_Supplier;

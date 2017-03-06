@@ -48,6 +48,7 @@ public:
 
 	CComboBox m_ATLWeek;
 	CComboBox m_MYWeek;
+	CComboBox m_MYDay;
 	CListCtrl m_BCMList;
 	CProgressCtrl m_PackProgress;
 	

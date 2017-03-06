@@ -29,6 +29,7 @@ public:
 	CString m_Year;
 	CString m_Capacity;
 	CString m_MYLen;
+	CString m_ATLYear;
 
 	afx_msg void OnBnClickedAddButton();
 	afx_msg void OnBnClickedModButton();

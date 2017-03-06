@@ -65,15 +65,15 @@ BOOL CCartonQuery::OnInitDialog()
 		|LVS_EX_HEADERDRAGDROP
 		|LVS_EX_ONECLICKACTIVATE
 		|LVS_EX_GRIDLINES);
-	m_ResultList.InsertColumn(0,"序号",LVCFMT_CENTER,40,0);
+	m_ResultList.InsertColumn(0,"序号",LVCFMT_CENTER,60,0);
 	m_ResultList.InsertColumn(1,"电池型号",LVCFMT_CENTER,120,1);
 	m_ResultList.InsertColumn(2,"外箱条码",LVCFMT_CENTER,100,2);
 	m_ResultList.InsertColumn(3,"电芯条码",LVCFMT_CENTER,100,3);
 	m_ResultList.InsertColumn(4,"电池条码",LVCFMT_CENTER,100,4);
 	m_ResultList.InsertColumn(5,"操作员",LVCFMT_CENTER,60,5);
-	m_ResultList.InsertColumn(6,"生产线/拉",LVCFMT_CENTER,80,6);
+	m_ResultList.InsertColumn(6,"生产线/拉",LVCFMT_CENTER,60,6);
 	m_ResultList.InsertColumn(7,"扫描时间",LVCFMT_CENTER,100,7);
-	m_ResultList.InsertColumn(8,"备注信息",LVCFMT_CENTER,100,8);
+	m_ResultList.InsertColumn(8,"备注信息",LVCFMT_CENTER,80,8);
 
 	UpdateData(false);
 

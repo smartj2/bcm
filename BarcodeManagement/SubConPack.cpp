@@ -53,6 +53,7 @@ void CSubConPack::DoDataExchange(CDataExchange* pDX)
 	DDX_Control(pDX, IDC_MYLEN_COMBO, m_MYLen);
 	DDX_Control(pDX, IDC_ATLWEEK_COMBO, m_ATLWeek);
 	DDX_Control(pDX, IDC_MYWEEK_COMBO, m_MYWeek);
+	DDX_Control(pDX, IDC_MYDAY_COMBO, m_MYDay);
 	DDX_Control(pDX, IDC_BCM_LIST, m_BCMList);
 	DDX_Control(pDX, IDC_PACK_PROGRESS, m_PackProgress);
 }
@@ -101,7 +102,7 @@ BOOL CSubConPack::OnInitDialog()
 	}
 
 	int week = 1;
-	while (week <= 52)
+	while (week <= 54)
 	{
 		std::string strWeek = boost::str(boost::format("%02d") % week);
 		m_ATLWeek.AddString(String2CString(strWeek));  // 电芯周期
@@ -109,10 +110,18 @@ BOOL CSubConPack::OnInitDialog()
 		week = week + 1;
 	}
 
+	int day = 1;
+	while (day <= 7)
+	{
+		m_MYDay.AddString(Int2CString(day));   // 电池周期
+		day = day + 1;
+	}
+
 	// 初始化默认选项
 	m_Model.SetCurSel(0);
-	m_ATLWeek.SetCurSel(26);
-	m_MYWeek.SetCurSel(32);
+	m_ATLWeek.SetCurSel(29);
+	m_MYWeek.SetCurSel(35);
+	m_MYDay.SetCurSel(2);
 
 	m_BCMList.SetExtendedStyle(LVS_EX_FLATSB
 		|LVS_EX_FULLROWSELECT
@@ -122,14 +131,14 @@ BOOL CSubConPack::OnInitDialog()
 
 	// 设置表头
 	m_BCMList.InsertColumn(0, "托盘号", LVCFMT_CENTER, 50, 0);
-	m_BCMList.InsertColumn(1, "电池序号", LVCFMT_CENTER, 50, 1);
+	m_BCMList.InsertColumn(1, "电池序号", LVCFMT_CENTER, 70, 1);
 	m_BCMList.InsertColumn(2, "外箱条码", LVCFMT_CENTER, 100, 2);
 	m_BCMList.InsertColumn(3, "电芯型号", LVCFMT_CENTER, 120, 3);
-	m_BCMList.InsertColumn(4, "电池条码", LVCFMT_CENTER, 120, 4);
-	m_BCMList.InsertColumn(5, "电芯条码", LVCFMT_CENTER, 120, 5);
-	m_BCMList.InsertColumn(6, "品质检员", LVCFMT_CENTER, 100, 6);
+	m_BCMList.InsertColumn(4, "电池条码", LVCFMT_CENTER, 140, 4);
+	m_BCMList.InsertColumn(5, "电芯条码", LVCFMT_CENTER, 100, 5);
+	m_BCMList.InsertColumn(6, "品质检员", LVCFMT_CENTER, 80, 6);
 	m_BCMList.InsertColumn(7, "扫码时间", LVCFMT_CENTER, 120, 7);
-	m_BCMList.InsertColumn(8, "备注", LVCFMT_CENTER, 120, 8);
+	m_BCMList.InsertColumn(8, "备注", LVCFMT_CENTER, 100, 8);
 
 	GetDlgItem(IDC_PACK_EDIT)->SetFocus();
 
@@ -521,6 +530,9 @@ bool CSubConPack::CheckBatteryCode(const CString& batteryCode)
 	m_MYWeek.GetLBText(m_MYWeek.GetCurSel(), packageWeek);
 	string strPackageWeek = CString2String(packageWeek);
 	strPackageWeek = boost::str( boost::format("%s%02d")% strPackageYear % strPackageWeek);
+	CString dayInWeek;
+	m_MYDay.GetLBText(m_MYDay.GetCurSel(), dayInWeek); //4表示星期四
+	string strDayInWeek = CString2String(dayInWeek);
 
 	// 管控容量 
 	string strCapacity=CString2String(capacity);
@@ -538,7 +550,7 @@ bool CSubConPack::CheckBatteryCode(const CString& batteryCode)
 	//[0-9A-Z]{1} 改为星期几
 	if (model == "GB-S10-203440-0100")
 	{
-		boost::regex reg(strType + strPackageWeek + "[0-9A-Z]{1}" + strProduceWeek + "[0-9A-Z]{4}" + "1" + strCapacity);
+		boost::regex reg(strType + strPackageWeek + strDayInWeek + strProduceWeek + "[0-9A-Z]{4}" + "1" + strCapacity);
 		if( boost::regex_match(strBatteryCode, reg)==false)
 		{
 			return false;
@@ -558,10 +570,11 @@ bool CSubConPack::CheckBatteryCode(const CString& batteryCode)
 	CString myWeek;  //  myWeek: 组装周期
 	m_ATLWeek.GetLBText(m_ATLWeek.GetCurSel(), atlWeek);
 	m_MYWeek.GetLBText(m_MYWeek.GetCurSel(), myWeek);
-	if (CString2Int(atlWeek) > CString2Int(myWeek))
-	{
-		return false;
-	}
+	//TODO: 修复跨年
+	//if (CString2Int(atlWeek) > CString2Int(myWeek)) //电池周期要大于电芯？
+	//{
+	//	return false;
+	//}
 
 	return true;
 }
