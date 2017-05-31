@@ -74,8 +74,8 @@ BOOL CBarcodeManagementApp::InitInstance()
 	{
 		m_pCon.CreateInstance(__uuidof(Connection));
 		//m_pCon.CreateInstance("ADODB.Recordset");
-	   _bstr_t strConnect="Provider=SQLOLEDB.1;Persist Security Info=False;User ID=bcm;Initial Catalog=bcm;Data Source=SRV03";
-	   //_bstr_t strConnect="Provider=SQLOLEDB.1;Persist Security Info=False;User ID=bcm;Initial Catalog=bcm;Data Source=shenshaowei";
+	   //_bstr_t strConnect="Provider=SQLOLEDB.1;Persist Security Info=False;User ID=bcm;Initial Catalog=bcm;Data Source=SRV03";
+	   _bstr_t strConnect="Provider=SQLOLEDB.1;Persist Security Info=False;User ID=bcm;Initial Catalog=bcm;Data Source=shenshaowei";
 	   //_bstr_t strConnect="Provider=SQLOLEDB.1;Persist Security Info=False;User ID=sa;Initial Catalog=bcm;Data Source=DEVELOPER";
 	   m_pCon->Open(strConnect,"bcm","bcmadmin",adModeUnknown);
 		//m_pCon->Open(strConnect,"sa","passw0rd",adModeUnknown);

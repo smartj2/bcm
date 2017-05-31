@@ -57,6 +57,18 @@
     <ClInclude Include="ClearData.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="TriplePack.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="SeriesBattery.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="RelieveBinding.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="ProductReport.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="BarcodeManagement.cpp">
@@ -90,6 +102,18 @@
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="ClearData.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="TriplePack.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="SeriesBattery.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="RelieveBinding.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="ProductReport.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>

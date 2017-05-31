@@ -113,12 +113,16 @@
     <ClInclude Include="CartonQuery.h" />
     <ClInclude Include="ClearData.h" />
     <ClInclude Include="Login.h" />
+    <ClInclude Include="ProductReport.h" />
+    <ClInclude Include="RelieveBinding.h" />
     <ClInclude Include="Resource.h" />
+    <ClInclude Include="SeriesBattery.h" />
     <ClInclude Include="SGMLine.h" />
     <ClInclude Include="SinglePack.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="SubConPack.h" />
     <ClInclude Include="targetver.h" />
+    <ClInclude Include="TriplePack.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="AlertBox.cpp" />
@@ -128,6 +132,9 @@
     <ClCompile Include="CartonQuery.cpp" />
     <ClCompile Include="ClearData.cpp" />
     <ClCompile Include="Login.cpp" />
+    <ClCompile Include="ProductReport.cpp" />
+    <ClCompile Include="RelieveBinding.cpp" />
+    <ClCompile Include="SeriesBattery.cpp" />
     <ClCompile Include="SGMLine.cpp" />
     <ClCompile Include="SinglePack.cpp" />
     <ClCompile Include="stdafx.cpp">
@@ -135,6 +142,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="SubConPack.cpp" />
+    <ClCompile Include="TriplePack.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="BarcodeManagement.rc" />

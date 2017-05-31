@@ -38,4 +38,8 @@ public:
 	afx_msg void OnCartonQuery();
 	afx_msg void OnClearMenu();
 	afx_msg void OnAboutbox();
+	afx_msg void OnSeriesMenu();
+	afx_msg void OnTripleMenu();
+	afx_msg void OnResolveMenu();
+	afx_msg void OnReportMenu();
 };

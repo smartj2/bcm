@@ -14,6 +14,10 @@
 #include "CartonQuery.h"
 #include "ClearData.h"
 #include "AlertBox.h"
+#include "SeriesBattery.h"
+#include "TriplePack.h"
+#include "RelieveBinding.h"
+#include "ProductReport.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -77,6 +81,10 @@ BEGIN_MESSAGE_MAP(CBarcodeManagementDlg, CDialogEx)
 	ON_COMMAND(ID_INFO_MENU, &CBarcodeManagementDlg::OnCartonQuery)
 	ON_COMMAND(IDD_ABOUTBOX, &CBarcodeManagementDlg::OnAboutbox)
 	ON_COMMAND(ID_CLEAR_MENU, &CBarcodeManagementDlg::OnClearMenu)
+	ON_COMMAND(ID_SERIES_MENU, &CBarcodeManagementDlg::OnSeriesMenu)
+	ON_COMMAND(ID_TRIPLE_MENU, &CBarcodeManagementDlg::OnTripleMenu)
+	ON_COMMAND(ID_RESOLVE_MENU, &CBarcodeManagementDlg::OnResolveMenu)
+	ON_COMMAND(ID_REPORT_MENU, &CBarcodeManagementDlg::OnReportMenu)
 END_MESSAGE_MAP()
 
 
@@ -237,3 +245,31 @@ void CBarcodeManagementDlg::OnAboutbox()
 	dlg.DoModal();
 }
 
+
+
+void CBarcodeManagementDlg::OnSeriesMenu()
+{
+	CSeriesBattery dlg;
+	dlg.DoModal();
+}
+
+
+void CBarcodeManagementDlg::OnTripleMenu()
+{
+	CTriplePack dlg;
+	dlg.DoModal();
+}
+
+
+void CBarcodeManagementDlg::OnResolveMenu()
+{
+	CRelieveBinding dlg;
+	dlg.DoModal();
+}
+
+
+void CBarcodeManagementDlg::OnReportMenu()
+{
+	CProductReport dlg;
+	dlg.DoModal();
+}
