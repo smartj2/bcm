@@ -21,7 +21,6 @@ CSinglePack::CSinglePack(CWnd* pParent /*=NULL*/)
 	, m_SGMQA(_T(""))
 	, m_Remark(_T(""))
 	, m_ATLCode(_T(""))
-	, TraySize(_T(""))
 	, m_SGMLine(_T(""))
 	, m_Current(_T("0"))
 {
