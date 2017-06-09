@@ -237,9 +237,10 @@ void CSGMLine::OnNMDblclkSgmList(NMHDR *pNMHDR, LRESULT *pResult)
 	m_Model = m_SGMList.GetItemText(i,0);
 	m_BMI = m_SGMList.GetItemText(i,1);
 	m_Year = m_SGMList.GetItemText(i,2);
-	m_Capacity = m_SGMList.GetItemText(i,3);
-	m_MYLen = m_SGMList.GetItemText(i,4);
-	m_ATLYear = m_SGMList.GetItemText(i,5);
+	m_ATLYear = m_SGMList.GetItemText(i,3);
+	m_Capacity = m_SGMList.GetItemText(i,4);
+	m_MYLen = m_SGMList.GetItemText(i,5);
+
 
 	UpdateData(false);
 
