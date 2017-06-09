@@ -189,6 +189,25 @@ void CSeriesBattery::OnEnChangeAtlcode2Edit()
 			GetDlgItem(IDC_ATLCODE1_EDIT)->SetFocus();
 			return;
 		}
+
+		if (m_ATLCode2 == m_ATLCode1)
+		{
+			AfxMessageBox("");
+			AfxMessageBox("电芯码重码！！！");
+			m_ATLCode1 = "";
+			m_ATLCode2 = "";
+
+			for (int i = 0; i < 3; i++)
+			{
+				m_ATLList.SetItemText(bnum-1,i,"");
+			}
+
+			UpdateData(false);
+
+			GetDlgItem(IDC_ATLCODE1_EDIT)->SetFocus();
+			return;
+		}
+
 		m_ATLList.SetItemText(bnum-1,2,m_ATLCode2);
 		
 		//将条码存入数据库
@@ -266,8 +285,8 @@ bool CSeriesBattery::CheckCoreCode(const CString& coreCode)
 	//string strDayInWeek = CString2String(dayInWeek);
 
 	//1.前三个字符串是一样的，后5位流水号
-	//boost::regex reg(strType + strYear + strWeek + "[0-9A-Z]{6}");
-	boost::regex reg(strType + "[0-9A-Z]{9}");
+	boost::regex reg(strType + strYear + strWeek + "[0-9A-Z]{6}");
+	//boost::regex reg(strType + "[0-9A-Z]{9}");
 	return boost::regex_match(strCoreCode, reg);
 }
 
