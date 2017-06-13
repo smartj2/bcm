@@ -58,11 +58,14 @@ void CClearData::OnBnClickedOk()
 
 	CString sql1 = "delete from bDoubleBarcode where MarkBox='"+m_ClearBox+"'";
 	CString sql2 = "delete from bSingleBarcode where MarkBox='"+m_ClearBox+"'";
+	CString sql3 = "delete from bTripleBarcode where MarkBox='"+m_ClearBox+"'";
+
 
 	try
 	{
 		theApp.m_pCon->Execute((_bstr_t)sql1,NULL,adCmdText);
 		theApp.m_pCon->Execute((_bstr_t)sql2,NULL,adCmdText);
+		theApp.m_pCon->Execute((_bstr_t)sql3,NULL,adCmdText);
 	} catch(_com_error e)
 	{
 		AfxMessageBox(e.Description());
