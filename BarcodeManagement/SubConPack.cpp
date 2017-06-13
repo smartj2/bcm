@@ -470,7 +470,8 @@ bool CSubConPack::CheckCoreCode(const CString& coreCode)
 	CString year;  //6表示2016年
 	year = (char*)(_bstr_t)m_pRs->GetCollect("ProduceYear");
 	CString week;	   //04表示第4个星期
-	m_ATLWeek.GetLBText(m_ATLWeek.GetCurSel(), week);
+	//m_ATLWeek.GetLBText(m_ATLWeek.GetCurSel(), week);
+	m_ATLWeek.GetWindowTextA(week);
 
 	//CString dayInWeek;
 	//m_Day.GetLBText(m_Day.GetCurSel(), dayInWeek); //4表示星期四
@@ -517,7 +518,8 @@ bool CSubConPack::CheckBatteryCode(const CString& batteryCode)
 	//CString produceYear = "K"; //K表示2016年
 	string strProduceYear=CString2String(produceYear);
 	CString produceWeek;	   //04表示第4个星期
-	m_ATLWeek.GetLBText(m_ATLWeek.GetCurSel(), produceWeek);
+	//m_ATLWeek.GetLBText(m_ATLWeek.GetCurSel(), produceWeek);
+	m_ATLWeek.GetWindowTextA(produceWeek);
 	string strProduceWeek = CString2String(produceWeek);
 	strProduceWeek = boost::str( boost::format("%s%02d") % strProduceYear % strProduceWeek);
 
@@ -527,11 +529,13 @@ bool CSubConPack::CheckBatteryCode(const CString& batteryCode)
 	//CString packageYear = "K"; //K表示2016年
 	string strPackageYear=CString2String(packageYear);
 	CString packageWeek;	   //09表示第9个星期
-	m_MYWeek.GetLBText(m_MYWeek.GetCurSel(), packageWeek);
+	//m_MYWeek.GetLBText(m_MYWeek.GetCurSel(), packageWeek);
+	m_MYWeek.GetWindowTextA(packageWeek);
 	string strPackageWeek = CString2String(packageWeek);
 	strPackageWeek = boost::str( boost::format("%s%02d")% strPackageYear % strPackageWeek);
 	CString dayInWeek;
-	m_MYDay.GetLBText(m_MYDay.GetCurSel(), dayInWeek); //4表示星期四
+	//m_MYDay.GetLBText(m_MYDay.GetCurSel(), dayInWeek); //4表示星期四
+	m_MYDay.GetWindowTextA(dayInWeek);
 	string strDayInWeek = CString2String(dayInWeek);
 
 	// 管控容量 
@@ -568,8 +572,10 @@ bool CSubConPack::CheckBatteryCode(const CString& batteryCode)
 	//判断日期大小
 	CString atlWeek; // atlWeek: 生产周期
 	CString myWeek;  //  myWeek: 组装周期
-	m_ATLWeek.GetLBText(m_ATLWeek.GetCurSel(), atlWeek);
-	m_MYWeek.GetLBText(m_MYWeek.GetCurSel(), myWeek);
+	//m_ATLWeek.GetLBText(m_ATLWeek.GetCurSel(), atlWeek);
+	m_ATLWeek.GetWindowTextA(atlWeek);
+	//m_MYWeek.GetLBText(m_MYWeek.GetCurSel(), myWeek);
+	m_MYWeek.GetWindowTextA(myWeek);
 	//TODO: 修复跨年
 	//if (CString2Int(atlWeek) > CString2Int(myWeek)) //电池周期要大于电芯？
 	//{

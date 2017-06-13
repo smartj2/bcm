@@ -27,6 +27,11 @@ public:
 	CString m_Query;
 	CListCtrl m_ResultList;
 	CComboBox m_QueryType;
+	CComboBox m_Code;
 	afx_msg void OnBnClickedQueryButton();
 	afx_msg void OnBnClickedExportButton();
+
+	void QueryAndExportSingleCode(CString type, CString code);
+	void QueryAndExportDoubleCode(CString type, CString code);
+	void QueryAndExportTripleCode(CString type, CString code);
 };

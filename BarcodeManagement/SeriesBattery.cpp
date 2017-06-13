@@ -297,7 +297,8 @@ bool CSeriesBattery::CheckCoreCode(const CString& coreCode)
 	year = (char*)(_bstr_t)m_pRs->GetCollect("ProduceYear");
 
 	CString week;	   //04表示第4个星期
-	m_ATLWeek.GetLBText(m_ATLWeek.GetCurSel(), week);
+	//m_ATLWeek.GetLBText(m_ATLWeek.GetCurSel(), week);
+	m_ATLWeek.GetWindowTextA(week);
 
 	//CString dayInWeek;
 	//m_Day.GetLBText(m_Day.GetCurSel(), dayInWeek); //4表示星期四
