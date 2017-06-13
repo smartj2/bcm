@@ -41,4 +41,6 @@ public:
 	CString String2CString(const string str);
 	int CString2Int(const CString cStr);
 	CString Int2CString(const int num);
+	CString m_ClearCode;
+	afx_msg void OnBnClickedClearButton();
 };
